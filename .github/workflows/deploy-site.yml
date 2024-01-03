@@ -30,10 +30,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v4
+      - name: Determine Emacs version
+        id: determine-emacs-version
+        run: echo "version=$(cat .emacs-version)" >> $GITHUB_OUTPUT
       - name: Install Emacs
         uses: purcell/setup-emacs@master
         with:
-          version: 29.1
+          version: ${{ steps.determine-emacs-version.outputs.version }}
       - name: Build site
         run: |
           echo "Hello World at $(date)" > ./dist/index.html
