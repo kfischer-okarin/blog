@@ -38,8 +38,7 @@ jobs:
         with:
           version: ${{ steps.determine-emacs-version.outputs.version }}
       - name: Build site
-        run: |
-          echo "Hello World at $(date)" > ./dist/index.html
+        run: ./scripts/build-site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

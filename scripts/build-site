@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -eu
+
+cd $(dirname $0)
+emacs --script ../src/build-site.el
