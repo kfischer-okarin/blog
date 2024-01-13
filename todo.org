@@ -1,0 +1,83 @@
+* Tasks
+
+** DOING MVP
+:LOGBOOK:
+- State "DOING"      from "TODO"       [2024-01-05 Fri 20:10]
+- State "TODO"       from              [2024-01-05 Fri 20:08]
+:END:
+*** DOING Make templates
+:LOGBOOK:
+- State "DOING"      from "TODO"       [2024-01-05 Fri 20:10]
+- State "TODO"       from              [2024-01-05 Fri 20:08]
+:END:
+- Try to replicate the Design of https://zkqiang.cn/ (https://github.com/fluid-dev/hexo-theme-fluid) as practice in
+  HTML/CSS/JS.
+- Going through the Guides on HTML/CSS/Javascript on MDN
+
+
+**** DOING Article Overview Template
+:LOGBOOK:
+- State "DOING"      from "TODO"       [2024-01-05 Fri 20:10]
+- State "TODO"       from              [2024-01-05 Fri 20:08]
+:END:
+
+
+**** TODO Blogpost Template
+:LOGBOOK:
+- State "TODO"       from              [2024-01-05 Fri 20:11]
+:END:
+
+
+*** TODO Write custom org-export backend
+:LOGBOOK:
+- State "TODO"       from              [2024-01-05 Fri 20:12]
+:END:
+- [ ] Use strong for *important* text
+- [ ] Use em for /emphasized/ text
+- [ ] Support optional Post Series tag
+  - [ ] automatically generate previous/next links to posts in the same series
+  - [ ] Generate Series overview
+- [ ] Generate ids & links for sub headings in an article
+- [ ] Header - nav - ul
+- [ ] Advanced text elements
+  - [ ] description lists? dl, dt (term), dd (description)
+  - [ ] begin_quote -> blockquote cite
+  - [ ] abbreviations -> abbr title
+  - [ ] address
+    - contact details of the autor of the nearest article or body
+  - [ ] proper code elements
+    - code, pre
+    - var - variable names
+    - kbd keyboard, - command line etc input
+    - samp - computer program output
+  - [ ] time datetime for marking dates/times
+  - [ ] Accessible HTML structure
+    - body > landmark role element > [nested landmark role element >] content
+      - Landmark role elements
+        - ~<header>~ (the ~banner~ role)
+        - ~<main>~ (the ~main~ role)
+          - only in body and only 1
+        - ~<footer>~ (the ~contentinfo~ role)
+        - ~<nav>~ (the ~navigation~ role)
+        - ~<aside>~ (the ~complementary~ role)
+          - top level only
+        - ~<form>~ (the ~form~ role)
+        - ~<form role="search">~ (the ~search~ role)
+        - ~<section>~ (the ~region~ role)
+
+
+** Ideas / Additional Tasks
+*** TODO Generate social Media metadata
+:LOGBOOK:
+- State "TODO"       from              [2024-01-05 Fri 20:10]
+:END:
+
+*** TODO Choose Icons
+:LOGBOOK:
+- State "TODO"       from              [2024-01-05 Fri 20:15]
+:END:
+
+*** TODO Japanese translations of articles
+:LOGBOOK:
+- State "TODO"       from              [2024-01-05 Fri 20:20]
+:END:
