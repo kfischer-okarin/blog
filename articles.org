@@ -1,6 +1,7 @@
 #+STARTUP: overview
 #+STARTUP: inlineimages
-#+PROPERTY: header-args:mermaid :theme dark :file (concat "images/generated/" (kf-org-current-headline-in-snakecase) ".svg")
+#+PROPERTY: header-args:mermaid :theme dark
+#+PROPERTY: header-args:mermaid+ :file (concat "images/generated/" (kf-org-current-headline-in-snakecase) ".svg")
 
 * Capturing all my git commits with org mode
   :PROPERTIES:
