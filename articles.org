@@ -1,0 +1,15 @@
+* Capturing all my git commits with org mode
+:PROPERTIES:
+:PUBLISHED_AT: nil
+:END:
+
+** Why log my commits?
+I often struggle with remembering what kind of things I worked on exactly during a work day and how much time I spent
+on them. I tried dozens of clocking applications but in the end they all rely on my own disciplined ability to turn the
+clock on at the right time and switch the clocked task when I start working on something else.
+
+So I guess the best way to remember what I did would be to automatically log all kinds of little things I do at the
+computer so I can use that data as landmarks when I look back on the day.
+
+One main activity I do during my development day time job (and during lots of my free time coding) is committing to a
+repository so that seems like a good place to start.
