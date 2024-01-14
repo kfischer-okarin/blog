@@ -1,6 +1,6 @@
 #+STARTUP: overview
 #+STARTUP: inlineimages
-#+PROPERTY: header-args:mermaid :theme dark
+#+PROPERTY: header-args:mermaid :theme dark :file (concat "images/generated/" (kf-org-current-headline-in-snakecase) ".svg")
 
 * Capturing all my git commits with org mode
   :PROPERTIES:
@@ -19,7 +19,8 @@
    repository so that seems like a good place to start.
 
 
-* Local Variables                                                  :noexport:
+* File Settings                                                    :noexport:
   Local Variables:
   org-adapt-indentation: t
+  eval: (load (expand-file-name "src/articles.el" (file-name-directory (buffer-file-name))))
   End:
