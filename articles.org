@@ -1,5 +1,6 @@
 #+STARTUP: overview
 #+STARTUP: inlineimages
+#+PROPERTY: header-args:mermaid :theme dark
 
 * Capturing all my git commits with org mode
   :PROPERTIES:
