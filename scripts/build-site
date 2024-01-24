@@ -2,5 +2,5 @@
 
 set -eu
 
-cd $(dirname $0)
-emacs --script ../src/build-site.el
+cd $(dirname $0)/..
+emacs --script ./src/build-site.el
