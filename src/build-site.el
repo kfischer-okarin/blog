@@ -2,7 +2,9 @@
 
 (print "Building site...")
 
-(find-file "articles.org")
+(let ((enable-local-variables :all))
+  (find-file "articles.org"))
+
 (let ((output (org-export-as org-export-website-backend)))
   (with-temp-buffer
     (insert output)
