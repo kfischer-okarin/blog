@@ -2,7 +2,10 @@
 
 (defconst org-export-website-backend (org-export-create-backend
                                       :transcoders '((template . org-export-website-template)
-                                                     (headline . org-export-website-headline))))
+                                                     (headline . org-export-website-headline)
+                                                     (section . org-export-website-section)
+                                                     (paragraph . org-export-website-paragraph))))
+
 
 (defun org-export-website-template (contents info)
   (let* ((template (with-temp-buffer
@@ -18,6 +21,12 @@
     (if contents
         (concat html-heading "\n\n" contents)
       html-heading)))
+
+(defun org-export-website-section (section contents _info)
+  contents)
+
+(defun org-export-website-paragraph (paragraph contents _info)
+  (concat "<p>" contents "</p>"))
 
 (defun replace-placeholder-with-indent (placeholder replacement string)
   (let* ((placeholder-indent (regexp-match-column placeholder string))
