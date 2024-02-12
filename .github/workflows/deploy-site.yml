@@ -39,6 +39,8 @@ jobs:
           version: ${{ steps.determine-emacs-version.outputs.version }}
       - name: Install build requirements
         run: ./scripts/install-build-requirements
+      - name: Install mermaid-cli
+        run: npm install -g @mermaid-js/mermaid-cli
       - name: Build site
         run: ./scripts/build-site
       - name: Upload artifact

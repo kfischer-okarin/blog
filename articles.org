@@ -2,6 +2,7 @@
 #+STARTUP: inlineimages
 #+PROPERTY: header-args:mermaid :theme dark
 #+PROPERTY: header-args:mermaid+ :file (kf-mermaid-result-filename)
+#+PROPERTY: header-args:mermaid+ :exports results
 
 * Capturing all my git commits with org mode
   :PROPERTIES:
@@ -18,6 +19,12 @@
 
    One main activity I do during my development day time job (and during lots of my free time coding) is committing to a
    repository so that seems like a good place to start.
+
+** Mechanism overview
+   #+begin_src mermaid
+     flowchart LR
+       Hook-->Test
+   #+end_src
 
 
 * File Settings                                                    :noexport:

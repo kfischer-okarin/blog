@@ -19,6 +19,7 @@
   (shell-command command))
 
 (shell-command-with-echo "git clean -fx ./dist")
+(shell-command-with-echo "git clean -fx ./images")
 
 (log-message "Building site...")
 
@@ -30,4 +31,10 @@
     (insert output)
     (write-file "./dist/index.html")))
 
+(log-message "Copying static files...")
 (shell-command-with-echo "cp -r ./static/* ./dist/")
+
+(log-message "Copying images...")
+(shell-command-with-echo "cp -r ./images ./dist/")
+
+(log-message "Done!")
