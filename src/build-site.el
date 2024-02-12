@@ -7,7 +7,7 @@
   (log-message (concat "$ " command))
   (shell-command command))
 
-(shell-command-with-echo "rm -rf ./dist/*")
+(shell-command-with-echo "git clean -fx ./dist")
 
 (log-message "Building site...")
 
