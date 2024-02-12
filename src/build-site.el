@@ -1,3 +1,8 @@
+(package-initialize)
+
+(setq org-babel-load-languages
+      '((mermaid . t)))
+
 (load-file "./src/export-backend.el")
 
 (defun log-message (message)
