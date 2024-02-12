@@ -4,7 +4,8 @@
                                       :transcoders '((template . org-export-website-template)
                                                      (headline . org-export-website-headline)
                                                      (section . org-export-website-section)
-                                                     (paragraph . org-export-website-paragraph))))
+                                                     (paragraph . org-export-website-paragraph)
+                                                     (link . org-export-website-link))))
 
 
 (defun org-export-website-template (contents info)
@@ -27,6 +28,17 @@
 
 (defun org-export-website-paragraph (paragraph contents _info)
   (concat "<p>" contents "</p>"))
+
+(defun org-export-website-link (link contents _info)
+  (let* ((type (org-element-property :type link))
+         (path (org-element-property :path link)))
+    (org-export-website-link--http-https link contents _info)))
+
+(defun org-export-website-link--http-https (link contents _info)
+  (let* ((type (org-element-property :type link))
+         (url (org-element-property :raw-link link))
+         (description (or contents url)))
+    (concat "<a href=\"" url "\">" description "</a>")))
 
 (defun replace-placeholder-with-indent (placeholder replacement string)
   (let* ((placeholder-indent (regexp-match-column placeholder string))
@@ -52,3 +64,7 @@
                     (concat (make-string n ?\s) line)))
                lines
                "\n")))
+
+; For debugging
+(defun print-element (element)
+  (print (org-element--format-element element)))

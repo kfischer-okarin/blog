@@ -16,3 +16,14 @@
 (ert-deftest test-replace-placeholder-with-indent ()
   (should (equal (replace-placeholder-with-indent "{{here}}" "content1\ncontent2" "foo\n  {{here}}\nbaz")
                   "foo\n  content1\n  content2\nbaz")))
+
+(ert-deftest test-org-export-website-link-http-https ()
+  (should (equal
+            (org-export-website-link '(link (:raw-link "http://example.com" :type "http")) "Link Text" nil)
+            "<a href=\"http://example.com\">Link Text</a>"))
+  (should (equal
+            (org-export-website-link '(link (:raw-link "https://example.com" :type "https")) "Link Text 2" nil)
+            "<a href=\"https://example.com\">Link Text 2</a>"))
+  (should (equal
+            (org-export-website-link '(link (:raw-link "http://example.com") :type "http") nil nil)
+            "<a href=\"http://example.com\">http://example.com</a>")))
