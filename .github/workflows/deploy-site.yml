@@ -37,6 +37,8 @@ jobs:
         uses: purcell/setup-emacs@master
         with:
           version: ${{ steps.determine-emacs-version.outputs.version }}
+      - name: Install build requirements
+        run: ./scripts/install-build-requirements
       - name: Build site
         run: ./scripts/build-site
       - name: Upload artifact

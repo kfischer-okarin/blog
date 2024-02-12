@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -eu
+
+cd $(dirname $0)/..
+emacs --script ./src/install-build-requirements.el
