@@ -1,3 +1,6 @@
+; For straight.el support
+(add-to-list 'load-path (expand-file-name "straight/build/ob-mermaid" user-emacs-directory))
+
 (package-initialize)
 
 (setq org-babel-load-languages
