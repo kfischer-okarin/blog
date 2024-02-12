@@ -6,6 +6,9 @@
 (setq org-babel-load-languages
       '((mermaid . t)))
 
+(setq org-confirm-babel-evaluate
+      (lambda (lang body) (not (string= lang "mermaid"))))
+
 (load-file "./src/export-backend.el")
 
 (defun log-message (message)
