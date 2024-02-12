@@ -27,3 +27,13 @@
   (should (equal
             (org-export-website-link '(link (:raw-link "http://example.com") :type "http") nil nil)
             "<a href=\"http://example.com\">http://example.com</a>")))
+
+(ert-deftest test-org-export-website-link-image-file ()
+  (should (equal
+           (org-export-website-link
+            '(link (:raw-link "file:./image.png" :path "./image.png" :type "file")) "Image Text" nil)
+           "<img src=\"./image.png\" alt=\"Image Text\" />"))
+  (should (equal
+           (org-export-website-link
+            '(link (:raw-link "file:./image.png" :path "./image.png" :type "file")) nil nil)
+            "<img src=\"./image.png\" />")))

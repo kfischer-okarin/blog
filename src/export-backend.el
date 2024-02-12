@@ -31,10 +31,20 @@
 
 (defun org-export-website-link (link contents _info)
   (let* ((type (org-element-property :type link))
-         (path (org-element-property :path link)))
-    (org-export-website-link--http-https link contents _info)))
+         (extension (file-name-extension (org-element-property :raw-link link))))
+    (cond
+      ((and (string= type "file") (seq-contains-p '("jpg" "jpeg" "png" "gif" "svg") extension))
+       (org-export-website-link--image link contents _info))
+      (t
+       (org-export-website-link--fallback link contents _info)))))
 
-(defun org-export-website-link--http-https (link contents _info)
+(defun org-export-website-link--image (link contents _info)
+  (let* ((type (org-element-property :type link))
+         (path (org-element-property :path link))
+         (attributes (if contents (concat " alt=\"" contents "\"") )))
+    (concat "<img src=\"" path "\"" attributes " />")))
+
+(defun org-export-website-link--fallback (link contents _info)
   (let* ((type (org-element-property :type link))
          (url (org-element-property :raw-link link))
          (description (or contents url)))
