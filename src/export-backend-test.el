@@ -43,3 +43,7 @@
            (org-export-website-link
             '(link (:raw-link "file:./image.png" :path "./image.png" :type "file")) nil nil)
             "<img src=\"./image.png\" />")))
+
+(ert-deftest test-org-export-website-italic ()
+  (should (equal (org-export-website-italic '(italic) "foo" nil)
+                 "<em>foo</em>")))

@@ -5,7 +5,8 @@
                                                      (headline . org-export-website-headline)
                                                      (section . org-export-website-section)
                                                      (paragraph . org-export-website-paragraph)
-                                                     (link . org-export-website-link))))
+                                                     (link . org-export-website-link)
+                                                     (italic . org-export-website-italic))))
 
 
 (defun org-export-website-template (contents info)
@@ -51,6 +52,9 @@
          (url (org-element-property :raw-link link))
          (description (or contents url)))
     (concat "<a href=\"" url "\">" description "</a>")))
+
+(defun org-export-website-italic (italic contents _info)
+  (concat "<em>" contents "</em>"))
 
 (defun replace-placeholder-with-indent (placeholder replacement string)
   (let* ((placeholder-indent (regexp-match-column placeholder string))
