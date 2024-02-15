@@ -33,7 +33,7 @@
   :SERIES_POST_NUMBER: 1
   :END:
   Today I participated in a so called /mokumoku-kai/ (もくもく会) for the first time - a Japanese style of meetup where
-  people just come together to silently[fn:: mokumoku meaning silent] work on their own projects. Basically being
+  people just come together to silently[fn::/mokumoku/ meaning silent] to work on their own projects. Basically being
   motivated to work on something by seeing other people busy working.
 
   Each meeting is probably slightly different but basically it consists of three steps:
