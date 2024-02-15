@@ -1,1 +1,9 @@
 /* TODO: Write Styles  */
+@font-face {
+    font-family: 'E-Keet Pixelwood';
+    src: url('fonts/e_keet_pixelwood.ttf') format('truetype');
+}
+
+body {
+    font-family: 'E-Keet Pixelwood', sans-serif;
+}
