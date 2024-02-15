@@ -1,5 +1,6 @@
 #+STARTUP: overview
 #+STARTUP: inlineimages
+#+STARTUP: fninline
 #+PROPERTY: header-args:mermaid :theme dark
 #+PROPERTY: header-args:mermaid+ :file (kf-mermaid-result-filename)
 #+PROPERTY: header-args:mermaid+ :exports results
@@ -26,6 +27,51 @@
        Hook-->Test
    #+end_src
 
+
+* It starts with an @
+  :PROPERTIES:
+  :SERIES_ID: cyberpunk-rl
+  :SERIES_POST_NUMBER: 1
+  :PUBLISHED_AT: nil
+  :END:
+  Today I participated in a so called /mokumoku-kai/ (もくもく会) for the first time - a Japanese style of meetup where
+  people just come together to silently[fn:: mokumoku meaning silent] work on their own projects. Basically being
+  motivated to work on something by seeing other people busy working.
+
+  Each meeting is probably slightly different but basically it consists of three steps:
+  1. Announce what you are planning do to during the meeting
+  2. Do the work
+  3. Share your progress and your impressions with your group
+
+  I used the opportunity to start yet another roguelike and hopefully stick with it - and as usual it starts with an at
+  sign moving over the screen.
+
+  [[video:cyberpunk-rl-0001-at-sign-moving.mp4][An at sign moving over the screen]]
+
+  And with DragonRuby that is just as simple as
+
+  #+begin_src ruby
+    def tick(args)
+      player_position = args.state.player_position ||= { x: 20, y: 12 }
+
+      keyboard = args.inputs.keyboard
+      if keyboard.key_down.up
+        player_position[:y] += 1
+      elsif keyboard.key_down.down
+        player_position[:y] -= 1
+      elsif keyboard.key_down.left
+        player_position[:x] -= 1
+      elsif keyboard.key_down.right
+        player_position[:x] += 1
+      end
+
+      args.outputs.background_color = [0, 0, 0]
+      args.outputs.sprites << {
+        x: player_position[:x] * 32, y: player_position[:y] * 32, w: 32, h: 32,
+        path: 'sprites/zilk-16x16.png', source_x: 0 * 16, source_y: 11 * 16, source_w: 16, source_h: 16
+      }
+    end
+  #+end_src
 
 * File Settings                                                    :noexport:
   Local Variables:
