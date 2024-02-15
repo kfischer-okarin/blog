@@ -7,7 +7,6 @@
 
 * Capturing all my git commits with org mode
   :PROPERTIES:
-  :PUBLISHED_AT: nil
   :END:
 
 ** Why log my commits?
@@ -32,7 +31,7 @@
   :PROPERTIES:
   :SERIES_ID: cyberpunk-rl
   :SERIES_POST_NUMBER: 1
-  :PUBLISHED_AT: nil
+  :PUBLISHED_AT: [2024-02-16 Fri 00:21]
   :END:
   Today I participated in a so called /mokumoku-kai/ (もくもく会) for the first time - a Japanese style of meetup where
   people just come together to silently[fn:: mokumoku meaning silent] work on their own projects. Basically being

@@ -18,10 +18,12 @@
 (defun org-export-website-headline (headline contents _info)
   (let* ((level (org-element-property :level headline))
          (title (org-element-property :raw-value headline))
-         (html-heading (format "<h%d>%s</h%d>" level title level)))
-    (if contents
-        (concat html-heading "\n\n" contents)
-      html-heading)))
+         (html-heading (format "<h%d>%s</h%d>" level title level))
+         (published-at (org-element-property :PUBLISHED_AT headline)))
+    (when (or (> level 1) published-at)
+        (if contents
+            (concat html-heading "\n\n" contents)
+          html-heading))))
 
 (defun org-export-website-section (section contents _info)
   contents)
