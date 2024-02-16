@@ -22,9 +22,9 @@
          (html-heading (format "<h%d>%s</h%d>" level title level))
          (published-at (org-element-property :PUBLISHED_AT headline)))
     (when (or (> level 1) published-at)
-        (if contents
-            (concat html-heading "\n\n" contents)
-          html-heading))))
+      (if contents
+          (concat html-heading "\n\n" contents)
+        html-heading))))
 
 (defun org-export-website-section (section contents _info)
   contents)

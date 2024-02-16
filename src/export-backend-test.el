@@ -10,7 +10,7 @@
                  "<h2>bar</h2>"))
   (should (equal (org-export-website-headline
                   '(headline (:raw-value "baz" :level 3)) "Some content" nil)
-                  "<h3>baz</h3>\n\nSome content")))
+                 "<h3>baz</h3>\n\nSome content")))
 
 (ert-deftest test-regexp-match-column ()
   (should (equal (regexp-match-column "b\\w\\w" "foo\nfoo bar baz") 4)))
@@ -21,18 +21,18 @@
 
 (ert-deftest test-replace-placeholder-with-indent ()
   (should (equal (replace-placeholder-with-indent "{{here}}" "content1\ncontent2" "foo\n  {{here}}\nbaz")
-                  "foo\n  content1\n  content2\nbaz")))
+                 "foo\n  content1\n  content2\nbaz")))
 
 (ert-deftest test-org-export-website-link-http-https ()
   (should (equal
-            (org-export-website-link '(link (:raw-link "http://example.com" :type "http")) "Link Text" nil)
-            "<a href=\"http://example.com\">Link Text</a>"))
+           (org-export-website-link '(link (:raw-link "http://example.com" :type "http")) "Link Text" nil)
+           "<a href=\"http://example.com\">Link Text</a>"))
   (should (equal
-            (org-export-website-link '(link (:raw-link "https://example.com" :type "https")) "Link Text 2" nil)
-            "<a href=\"https://example.com\">Link Text 2</a>"))
+           (org-export-website-link '(link (:raw-link "https://example.com" :type "https")) "Link Text 2" nil)
+           "<a href=\"https://example.com\">Link Text 2</a>"))
   (should (equal
-            (org-export-website-link '(link (:raw-link "http://example.com") :type "http") nil nil)
-            "<a href=\"http://example.com\">http://example.com</a>")))
+           (org-export-website-link '(link (:raw-link "http://example.com") :type "http") nil nil)
+           "<a href=\"http://example.com\">http://example.com</a>")))
 
 (ert-deftest test-org-export-website-link-image-file ()
   (should (equal
@@ -42,7 +42,7 @@
   (should (equal
            (org-export-website-link
             '(link (:raw-link "file:./image.png" :path "./image.png" :type "file")) nil nil)
-            "<img src=\"./image.png\" />")))
+           "<img src=\"./image.png\" />")))
 
 (ert-deftest test-org-export-website-italic ()
   (should (equal (org-export-website-italic '(italic) "foo" nil)
