@@ -71,7 +71,7 @@
          (remaining-replacement-lines (cdr replacement-lines)))
     (replace-regexp-in-string placeholder
                               (concat first-replacement-line "\n"
-                                      (indent-string (mapconcat 'identity remaining-replacement-lines "\n")
+                                      (indent-html-string (mapconcat 'identity remaining-replacement-lines "\n")
                                                      placeholder-indent))
                               string)))
 
@@ -80,14 +80,19 @@
          (matched-column (seq-find 'identity (seq-map (lambda (line) (string-match-p regexp line)) lines))))
     matched-column))
 
-(defun indent-string (string n)
-  (let ((lines (split-string string "\n")))
+(defun indent-html-string (string n)
+  (let ((lines (split-string string "\n"))
+        (inside-code-block nil))
     (mapconcat (lambda (line)
-                  (if (string-empty-p line)
-                      ""
-                    (concat (make-string n ?\s) line)))
-               lines
-               "\n")))
+                 (cond
+                  ((string-empty-p line) "")
+                  (inside-code-block
+                    (when (string-match-p "</code>" line)
+                      (setq inside-code-block nil))
+                    line)
+                  (t (setq inside-code-block (string-match-p "<code" line))
+                     (concat (make-string n ?\ ) line))))
+               lines "\n")))
 
 ; For debugging
 (defun print-element (element)
