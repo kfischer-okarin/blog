@@ -44,6 +44,12 @@
             '(link (:raw-link "file:./image.png" :path "./image.png" :type "file")) nil nil)
            "<img src=\"./image.png\" />")))
 
+(ert-deftest test-org-export-website-link-video-file ()
+  (should (equal
+           (org-export-website-link
+            '(link (:raw-link "file:./video.mp4" :path "./video.mp4" :type "file")) "Video Text" nil)
+           "<figure><video controls width=\"640\"><source src=\"./video.mp4\" type=\"video/mp4\" /></video><figcaption>Video Text</figcaption></figure>")))
+
 (ert-deftest test-org-export-website-italic ()
   (should (equal (org-export-website-italic '(italic) "foo" nil)
                  "<em>foo</em>")))

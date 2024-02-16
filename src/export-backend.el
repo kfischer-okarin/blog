@@ -38,6 +38,8 @@
     (cond
       ((and (string= type "file") (seq-contains-p '("jpg" "jpeg" "png" "gif" "svg") extension))
        (org-export-website-link--image link contents _info))
+      ((and (string= type "file") (string= extension "mp4"))
+       (org-export-website-link--video link contents _info))
       (t
        (org-export-website-link--fallback link contents _info)))))
 
@@ -45,6 +47,13 @@
   (let* ((path (org-element-property :path link))
          (attributes (if contents (concat " alt=\"" contents "\"") )))
     (concat "<img src=\"" path "\"" attributes " />")))
+
+(defun org-export-website-link--video (link contents _info)
+  (let* ((path (org-element-property :path link)))
+    (concat "<figure>"
+            "<video controls width=\"640\"><source src=\"" path "\" type=\"video/mp4\" /></video>"
+            "<figcaption>" contents "</figcaption>"
+            "</figure>")))
 
 (defun org-export-website-link--fallback (link contents _info)
   (let* ((type (org-element-property :type link))
