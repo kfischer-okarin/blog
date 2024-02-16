@@ -42,8 +42,7 @@
        (org-export-website-link--fallback link contents _info)))))
 
 (defun org-export-website-link--image (link contents _info)
-  (let* ((type (org-element-property :type link))
-         (path (org-element-property :path link))
+  (let* ((path (org-element-property :path link))
          (attributes (if contents (concat " alt=\"" contents "\"") )))
     (concat "<img src=\"" path "\"" attributes " />")))
 
