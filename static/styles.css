@@ -7,3 +7,20 @@
 body {
     font-family: 'E-Keet Pixelwood', sans-serif;
 }
+
+.content-columns-root {
+    display: flex;
+}
+
+.left-spacer {
+    flex: 1;
+}
+
+.content-column {
+    flex: 8;
+    padding: 3rem 10%;
+}
+
+.right-spacer {
+    flex: 3;
+}

@@ -10,7 +10,15 @@
   </head>
   <body>
     <main>
-      {{ content }}
+      <div class="content-columns-root">
+        <div class="left-spacer"></div>
+        <div class="content-column">
+          <article>
+            {{ content }}
+          </article>
+        </div>
+        <div class="right-spacer"></div>
+      </div>
     </main>
 
     <footer>
