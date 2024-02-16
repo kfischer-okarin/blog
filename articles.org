@@ -44,7 +44,7 @@
   I used the opportunity to start yet another roguelike and hopefully stick with it - and as usual it starts with an at
   sign moving over the screen.
 
-  [[video:cyberpunk-rl-0001-at-sign-moving.mp4][An at sign moving over the screen]]
+  [[file:videos/cyberpunk-rl-0001-at-sign-moving.mp4][An at sign moving over the screen]]
 
   And with DragonRuby that is just as simple as
 

@@ -37,4 +37,7 @@
 (log-message "Copying images...")
 (shell-command-with-echo "cp -r ./images ./dist/")
 
+(log-message "Copying videos...")
+(shell-command-with-echo "cp -r ./videos ./dist/")
+
 (log-message "Done!")
