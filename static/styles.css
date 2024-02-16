@@ -24,3 +24,7 @@ body {
 .right-spacer {
     flex: 3;
 }
+
+.footnotes li {
+    list-style: none;
+}

@@ -7,7 +7,8 @@
                                                      (paragraph . org-export-website-paragraph)
                                                      (link . org-export-website-link)
                                                      (italic . org-export-website-italic)
-                                                     (src-block . org-export-website-src-block))))
+                                                     (src-block . org-export-website-src-block)
+                                                     (footnote-reference . org-export-website-footnote-reference))))
 
 (defun org-export-website-template (contents info)
   (let* ((template (with-temp-buffer
@@ -16,15 +17,27 @@
          (contents-placeholder-indent (regexp-match-column "{{ content }}" template)))
     (replace-placeholder-with-indent "{{ content }}" contents template)))
 
-(defun org-export-website-headline (headline contents _info)
+(defun org-export-website-headline (headline contents info)
   (let* ((level (org-element-property :level headline))
          (title (org-element-property :raw-value headline))
          (html-heading (format "<h%d>%s</h%d>" level title level))
-         (published-at (org-element-property :PUBLISHED_AT headline)))
-    (when (or (> level 1) published-at)
-      (if contents
-          (concat html-heading "\n\n" contents)
-        html-heading))))
+         (body-part (when contents (concat "\n\n" contents)))
+         (footnotes-part
+          (when (eq level 1)
+            (let ((footnotes (plist-get info :footnotes)))
+              (when footnotes
+                (concat "\n\n"
+                        "<div class=\"footnotes\">"
+                        "<ol>"
+                        (mapconcat (lambda (footnote) (concat "<li>" footnote "</li>")) footnotes)
+                        "</ol>"
+                        "</div>")))))
+         (published-at (org-element-property :PUBLISHED_AT headline))
+         (should-process (or (> level 1) published-at)))
+    (when should-process
+      (when (eq level 1)
+        (plist-put info :footnotes nil))
+      (concat html-heading body-part footnotes-part))))
 
 (defun org-export-website-section (section contents _info)
   contents)
@@ -76,6 +89,22 @@
              code-lines
              "\n")
             "</code></pre>")))
+
+(defun org-export-website-footnote-reference (footnote-reference contents info)
+  (let* ((footnotes (plist-get info :footnotes))
+         (footnote-number (+ 1 (length footnotes))))
+    (plist-put info :footnotes
+               (append footnotes
+                       (list
+                        (concat "<a href=\"#fnref-" (number-to-string footnote-number) "\" id=\"fn-" (number-to-string footnote-number) "\">"
+                                "[" (number-to-string footnote-number) "]"
+                                "</a> "
+                                contents))))
+    (concat "<sup>"
+            "<a href=\"#fn-" (number-to-string footnote-number) "\" id=\"fnref-" (number-to-string footnote-number) "\">"
+            "[" (number-to-string footnote-number) "]"
+            "</a>"
+            "</sup>")))
 
 (defun replace-placeholder-with-indent (placeholder replacement string)
   (let* ((placeholder-indent (regexp-match-column placeholder string))

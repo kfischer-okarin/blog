@@ -12,6 +12,26 @@
                   '(headline (:raw-value "baz" :level 3)) "Some content" nil)
                  "<h3>baz</h3>\n\nSome content")))
 
+(ert-deftest test-org-export-website-headline-level-1-resets-footnotes ()
+  (let ((info '(:footnotes ("a" "b"))))
+    (org-export-website-headline
+     '(headline (:raw-value "foo" :level 1 :PUBLISHED_AT "[2024-02-16 Fri 00:21]")) nil info)
+    (should (equal (plist-get info :footnotes) nil))))
+
+(ert-deftest test-org-export-website-headline-level-2-does-not-reset-footnotes ()
+  (let ((info '(:footnotes ("a" "b"))))
+    (org-export-website-headline
+     '(headline (:raw-value "foo" :level 2 :PUBLISHED_AT "[2024-02-16 Fri 00:21]")) nil info)
+    (should (equal (plist-get info :footnotes) '("a" "b")))))
+
+(ert-deftest test-org-export-website-headline-footnotes-are-attached-after-level-1-headlines ()
+  (should (equal
+           (org-export-website-headline
+            '(headline (:raw-value "foo" :level 1 :PUBLISHED_AT "[2024-02-16 Fri 00:21]"))
+            nil
+            '(:footnotes ("a" "b")))
+            "<h1>foo</h1>\n\n<div class=\"footnotes\"><ol><li>a</li><li>b</li></ol></div>")))
+
 (ert-deftest test-regexp-match-column ()
   (should (equal (regexp-match-column "b\\w\\w" "foo\nfoo bar baz") 4)))
 
