@@ -8,7 +8,9 @@
                                                      (link . org-export-website-link)
                                                      (italic . org-export-website-italic)
                                                      (src-block . org-export-website-src-block)
-                                                     (footnote-reference . org-export-website-footnote-reference))))
+                                                     (footnote-reference . org-export-website-footnote-reference)
+                                                     (plain-list . org-export-website-plain-list)
+                                                     (item . org-export-website-item))))
 
 (defun org-export-website-template (contents info)
   (let* ((template (with-temp-buffer
@@ -105,6 +107,14 @@
             "[" (number-to-string footnote-number) "]"
             "</a>"
             "</sup>")))
+
+(defun org-export-website-plain-list (plain-list contents _info)
+  (let* ((type (org-element-property :type plain-list))
+         (tag (if (string= type "ordered") "ol" "ul")))
+    (concat "<" tag ">" contents "</" tag ">")))
+
+(defun org-export-website-item (item contents _info)
+  (concat "<li>" contents "</li>"))
 
 (defun replace-placeholder-with-indent (placeholder replacement string)
   (let* ((placeholder-indent (regexp-match-column placeholder string))
