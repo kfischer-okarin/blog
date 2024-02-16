@@ -6,8 +6,8 @@
                                                      (section . org-export-website-section)
                                                      (paragraph . org-export-website-paragraph)
                                                      (link . org-export-website-link)
-                                                     (italic . org-export-website-italic))))
-
+                                                     (italic . org-export-website-italic)
+                                                     (src-block . org-export-website-src-block))))
 
 (defun org-export-website-template (contents info)
   (let* ((template (with-temp-buffer
@@ -63,6 +63,19 @@
 
 (defun org-export-website-italic (italic contents _info)
   (concat "<em>" contents "</em>"))
+
+(defun org-export-website-src-block (src-block contents _info)
+  (let* ((language (org-element-property :language src-block))
+         (code-lines (split-string (org-element-property :value src-block) "\n")))
+    (concat "<pre><code class=\"language-" language "\">"
+            (mapconcat
+             (lambda (line)
+               (if (string-empty-p line)
+                   line
+                 (substring line 2)))
+             code-lines
+             "\n")
+            "</code></pre>")))
 
 (defun replace-placeholder-with-indent (placeholder replacement string)
   (let* ((placeholder-indent (regexp-match-column placeholder string))

@@ -55,3 +55,8 @@
 (ert-deftest test-org-export-website-italic ()
   (should (equal (org-export-website-italic '(italic) "foo" nil)
                  "<em>foo</em>")))
+
+(ert-deftest test-org-export-website-src-block ()
+  (should (equal (org-export-website-src-block
+                  '(src-block (:language "python" :value "  print('foo')\n\n  1 + 2")) nil nil)
+                  "<pre><code class=\"language-python\">print('foo')\n\n1 + 2</code></pre>")))
