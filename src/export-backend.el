@@ -12,12 +12,13 @@
                                                      (plain-list . org-export-website-plain-list)
                                                      (item . org-export-website-item))))
 
+(defvar org-export-website-template-string (with-temp-buffer
+                                             (insert-file-contents "templates/index.html")
+                                             (buffer-string)))
+
 (defun org-export-website-template (contents info)
-  (let* ((template (with-temp-buffer
-                    (insert-file-contents "templates/index.html")
-                    (buffer-string)))
-         (contents-placeholder-indent (regexp-match-column "{{ content }}" template)))
-    (replace-placeholder-with-indent "{{ content }}" contents template)))
+  (let* ((contents-placeholder-indent (regexp-match-column "{{ content }}" org-export-website-template-string)))
+    (replace-placeholder-with-indent "{{ content }}" contents org-export-website-template-string)))
 
 (defun org-export-website-headline (headline contents info)
   (let* ((level (org-element-property :level headline))
