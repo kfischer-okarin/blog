@@ -26,7 +26,11 @@
 (let ((enable-local-variables :all))
   (find-file "articles.org"))
 
-(let ((output (org-export-as org-export-website-backend)))
+(let* ((org-export-website-template-string
+        (with-temp-buffer
+          (insert-file-contents "templates/index.html")
+          (buffer-string)))
+       (output (org-export-as org-export-website-backend)))
   (with-temp-buffer
     (insert output)
     (write-file "./dist/index.html")))

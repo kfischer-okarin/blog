@@ -12,9 +12,7 @@
                                                      (plain-list . org-export-website-plain-list)
                                                      (item . org-export-website-item))))
 
-(defvar org-export-website-template-string (with-temp-buffer
-                                             (insert-file-contents "templates/index.html")
-                                             (buffer-string)))
+(defvar org-export-website-template-string)
 
 (defun org-export-website-template (contents info)
   (let* ((contents-placeholder-indent (regexp-match-column "{{ content }}" org-export-website-template-string)))
