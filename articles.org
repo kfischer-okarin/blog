@@ -102,6 +102,9 @@
 
 ** Interacting with the door
 
+** A Video
+
+   [[file:videos/cyberpunk-rl-0002-walls-and-a-door][Leaving the room]]
 
 * File Settings                                                    :noexport:
   Local Variables:
