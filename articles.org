@@ -72,6 +72,37 @@
     end
   #+end_src
 
+
+* My own four walls
+  :PROPERTIES:
+  :SERIES_ID: cyberpunk-rl
+  :SERIES_POST_NUMBER: 2
+  :END:
+  Last week I left off with having an at sign walking across the screen. That is already a nice start and the next
+  logical step would be to add some walls to restrict the player's movement as well as a door which can be opened and
+  closed via a button press.
+
+** Separating the player's action and their execution
+   In order to implement walls I will need check whether I can actually move in the direction I pressed.
+
+   Since the current, very simple first version of my movement code immediately and directly updates the player's
+   position when an arrow key is pressed, adding such a check would
+
+** Adding a reset hotkey
+
+** Refactoring the sprite rendering
+
+** DragonRuby hot reload trick - selectively resetting state
+
+** A good tricks works twice - authoring the map with hot reload
+
+** Doing collisions
+
+** A door (?)
+
+** Interacting with the door
+
+
 * File Settings                                                    :noexport:
   Local Variables:
   org-adapt-indentation: t
