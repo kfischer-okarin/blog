@@ -80,13 +80,14 @@
 
 (defun org-export-website-src-block (src-block contents _info)
   (let* ((language (org-element-property :language src-block))
-         (code-lines (split-string (org-element-property :value src-block) "\n")))
+         (code-lines (split-string (org-element-property :value src-block) "\n"))
+         (indent (string-match "\\w" (nth 0 code-lines))))
     (concat "<pre><code class=\"language-" language "\">"
             (mapconcat
              (lambda (line)
                (if (string-empty-p line)
                    line
-                 (substring line 2)))
+                 (substring line indent)))
              code-lines
              "\n")
             "</code></pre>")))

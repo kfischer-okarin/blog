@@ -72,7 +72,7 @@
                                    ""
                                    "  1 + 2"
                                    "#+end_src")
-                 "<pre><code class=\"language-python\">print('foo')\n\n1 + 2\</code></pre>")))
+                 "<pre><code class=\"language-python\">print('foo')\n\n1 + 2\n</code></pre>")))
 
 (ert-deftest test-regexp-match-column ()
   (should (equal (regexp-match-column "b\\w\\w" "foo\nfoo bar baz") 4)))
