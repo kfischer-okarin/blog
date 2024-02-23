@@ -5,18 +5,31 @@
   (log-message (concat "$ " command))
   (shell-command command))
 
+(defun read-file-as-string (file)
+  (with-temp-buffer
+    (insert-file-contents file)
+    (buffer-string)))
+
+(defun write-string-to-file (string file)
+  (with-temp-buffer
+    (insert string)
+    (write-file file)))
+
 ; For straight.el support
 (add-to-list 'load-path (expand-file-name "straight/build/ob-mermaid" user-emacs-directory))
 
 (package-initialize)
 
-(setq org-babel-load-languages
-      '((mermaid . t)))
-
-(setq org-confirm-babel-evaluate
-      (lambda (lang body) (not (string= lang "mermaid"))))
-
 (load-file "./src/export-backend.el")
+
+(defun export-article ()
+  (let ((org-babel-load-languages
+         '((mermaid . t)))
+        (org-confirm-babel-evaluate
+         (lambda (lang body) (not (string= lang "mermaid"))))
+        (org-export-website-template-string
+         (read-file-as-string "templates/index.html")))
+    (org-export-as org-export-website-backend)))
 
 (shell-command-with-echo "git clean -fx ./dist")
 (shell-command-with-echo "git clean -fx ./images")
@@ -26,14 +39,9 @@
 (let ((enable-local-variables :all))
   (find-file "articles.org"))
 
-(let* ((org-export-website-template-string
-        (with-temp-buffer
-          (insert-file-contents "templates/index.html")
-          (buffer-string)))
-       (output (org-export-as org-export-website-backend)))
-  (with-temp-buffer
-    (insert output)
-    (write-file "./dist/index.html")))
+(write-string-to-file
+ (export-article)
+  "./dist/index.html")
 
 (log-message "Copying static files...")
 (shell-command-with-echo "cp -r ./static/* ./dist/")
