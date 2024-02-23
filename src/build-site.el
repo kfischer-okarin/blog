@@ -28,7 +28,10 @@
         (org-confirm-babel-evaluate
          (lambda (lang body) (not (string= lang "mermaid")))))
     (org-export-as org-export-website-backend nil nil nil
-                   `(:page-template ,(read-file-as-string "templates/index.html")))))
+                   `(:page-template
+                     ,(read-file-as-string "templates/index.html")
+                     :stylesheet-path
+                     "../styles.css"))))
 
 (shell-command-with-echo "git clean -fx ./dist")
 (shell-command-with-echo "git clean -fx ./images")

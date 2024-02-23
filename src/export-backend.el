@@ -14,8 +14,15 @@
 
 (defun org-export-website-template (contents info)
   (let* ((page-template (plist-get info :page-template))
+         (stylesheet-path (plist-get info :stylesheet-path))
          (contents-placeholder-indent (regexp-match-column "{{ content }}" page-template)))
-    (replace-placeholder-with-indent "{{ content }}" contents page-template)))
+    (replace-regexp-in-string
+     "{{ stylesheet-path }}"
+     stylesheet-path
+     (replace-placeholder-with-indent
+      "{{ content }}"
+      contents
+      page-template))))
 
 (defun org-export-website-headline (headline contents info)
   (let* ((level (org-element-property :level headline))
