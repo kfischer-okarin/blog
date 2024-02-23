@@ -20,6 +20,10 @@ h1 {
     font-size: 2.25rem;
 }
 
+section {
+    margin-bottom: 3rem;
+}
+
 h2 {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
