@@ -24,7 +24,10 @@
                                    ":END:")
                  "<h1>foo</h1>"))
   (should (equal (export-org-lines "* foo") ""))
-  (should (equal (export-org-lines "** bar") "<h2>bar</h2>"))
+  (should (equal (export-org-lines "** bar")
+                 (concat-lines "<section>"
+                               "<h2>bar</h2>"
+                               "</section>")))
   (should (equal (export-org-lines "*** baz"
                                    "Some content")
                  (concat-lines "<h3>baz</h3>"
@@ -37,9 +40,12 @@
                                    "Something secret[fn::not telling you]")
                  (concat-lines "<h1>foo</h1>"
                                ""
+                               "<section>"
                                "<h2>Subheader</h2>"
                                ""
                                "<p>Something secret<sup><a href=\"#fn-1\" id=\"fnref-1\">[1]</a></sup></p>"
+                               ""
+                               "</section>"
                                ""
                                ""
                                "<div class=\"footnotes\"><ol><li><a href=\"#fnref-1\" id=\"fn-1\">[1]</a> not telling you</li></ol></div>"))))

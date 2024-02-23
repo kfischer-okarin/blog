@@ -30,9 +30,15 @@
         (when (eq level 1)
           (plist-put info :footnotes nil))
         (let* ((title (org-element-property :raw-value headline))
+               (section-start (when (eq level 2) "<section>\n"))
+               (section-end (when (eq level 2) "\n</section>"))
                (html-heading (format "<h%d>%s</h%d>" level title level))
                (body-part (when contents (concat "\n\n" contents))))
-          (concat html-heading body-part footnotes-part))))))
+          (concat section-start
+                  html-heading
+                  body-part
+                  section-end
+                  footnotes-part))))))
 
 (defun org-export-website--build-footnotes (footnotes)
   (when footnotes
