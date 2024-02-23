@@ -32,7 +32,9 @@
                      `(:page-template
                        ,(read-file-as-string "templates/index.html")
                        :stylesheet-path
-                       "../styles.css")))))
+                       "../styles.css"
+                       :media-path
+                       "../")))))
 
 (defun export-all-articles ()
   (org-map-entries

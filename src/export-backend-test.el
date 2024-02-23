@@ -5,12 +5,15 @@
    "\n"))
 
 (defun export-org-lines (&rest lines)
+  (apply #'export-org-lines-with-options nil lines))
+
+(defun export-org-lines-with-options (options &rest lines)
   (let ((org-content (apply #'concat-lines lines)))
     (with-temp-buffer
       (insert org-content)
       (string-trim-right
        (org-export-as org-export-website-backend nil nil nil
-                      '(:page-template "{{ content }}"))))))
+                      (append options '(:page-template "{{ content }}")))))))
 
 (defun article-headline (title &optional published-at)
   (concat-lines (concat "* " title)
@@ -60,14 +63,18 @@
                  "<p><a href=\"http://example.com\">http://example.com</a></p>")))
 
 (ert-deftest test-org-export-website-link-image-file ()
-  (should (equal (export-org-lines "[[file:./image.png][Image Text]]")
+  (should (equal (export-org-lines "[[file:image.png][Image Text]]")
                  "<p><img src=\"./image.png\" alt=\"Image Text\" /></p>"))
-  (should (equal (export-org-lines "[[file:./image.png]]")
-                 "<p><img src=\"./image.png\" /></p>")))
+  (should (equal (export-org-lines "[[file:image.png]]")
+                 "<p><img src=\"./image.png\" /></p>"))
+  (should (equal (export-org-lines-with-options '(:media-path "./media/") "[[file:image.png]]")
+                 "<p><img src=\"./media/image.png\" /></p>")))
 
 (ert-deftest test-org-export-website-link-video-file ()
-  (should (equal (export-org-lines "[[file:./video.mp4][Video Text]]")
-                                   "<p><figure><video controls width=\"640\"><source src=\"./video.mp4\" type=\"video/mp4\" /></video><figcaption>Video Text</figcaption></figure></p>")))
+  (should (equal (export-org-lines "[[file:video.mp4][Video Text]]")
+                 "<p><figure><video controls width=\"640\"><source src=\"./video.mp4\" type=\"video/mp4\" /></video><figcaption>Video Text</figcaption></figure></p>"))
+  (should (equal (export-org-lines-with-options '(:media-path "./media/") "[[file:video.mp4][Video Text]]")
+                  "<p><figure><video controls width=\"640\"><source src=\"./media/video.mp4\" type=\"video/mp4\" /></video><figcaption>Video Text</figcaption></figure></p>")))
 
 (ert-deftest test-org-export-website-italic ()
   (should (equal (export-org-lines "/foo/")

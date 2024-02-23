@@ -10,7 +10,8 @@
                                                      (src-block . org-export-website-src-block)
                                                      (footnote-reference . org-export-website-footnote-reference)
                                                      (plain-list . org-export-website-plain-list)
-                                                     (item . org-export-website-item))))
+                                                     (item . org-export-website-item))
+                                      :options '((:media-path nil nil "."))))
 
 (defun org-export-website-template (contents info)
   (let* ((page-template (plist-get info :page-template))
@@ -71,13 +72,13 @@
       (t
        (org-export-website-link--fallback link contents _info)))))
 
-(defun org-export-website-link--image (link contents _info)
-  (let* ((path (org-element-property :path link))
+(defun org-export-website-link--image (link contents info)
+  (let* ((path (file-name-concat (plist-get info :media-path) (org-element-property :path link)))
          (attributes (if contents (concat " alt=\"" contents "\"") )))
     (concat "<img src=\"" path "\"" attributes " />")))
 
 (defun org-export-website-link--video (link contents _info)
-  (let* ((path (org-element-property :path link)))
+  (let* ((path (file-name-concat (plist-get _info :media-path) (org-element-property :path link))))
     (concat "<figure>"
             "<video controls width=\"640\"><source src=\"" path "\" type=\"video/mp4\" /></video>"
             "<figcaption>" contents "</figcaption>"
