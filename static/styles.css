@@ -4,9 +4,34 @@
     src: url('fonts/e_keet_pixelwood.ttf') format('truetype');
 }
 
-body {
+:root {
     font-family: 'E-Keet Pixelwood', sans-serif;
+    font-size: 24px;
+    letter-spacing: 1px;
     --grid-column-width: calc(100% / 12);
+}
+
+h1, h2, p, ol, ul, pre {
+    margin-top: 0;
+    margin-bottom: 1.75rem;
+}
+
+h1 {
+    font-size: 2.25rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Reduce margin of paragraphs before code blocks */
+p:has(+ pre) {
+    margin-bottom: 0.25rem;
+}
+
+pre code.hljs {
+    font-size: 14px;
 }
 
 .content-columns-root {
