@@ -134,6 +134,50 @@
           (string-trim contents "\\(<p>\\|[ \t\n\r]\\)+" "\\(</p>\\|[ \t\n\r]\\)+")
           "</li>\n"))
 
+;;; Blog Index Page
+
+(defconst org-export-blog-index-backend (org-export-create-backend
+                                         :transcoders '((template . org-export-blog-index-template)
+                                                        (headline . org-export-blog-index-headline))))
+
+(defun org-export-blog-index-template (_contents info)
+  (let* ((newest-to-oldest-headlines
+          (sort (plist-get info :headlines)
+                (lambda (a b)
+                  (time-less-p
+                   (plist-get b :published-at)
+                   (plist-get a :published-at)))))
+         (contents (concat "<ul>"
+                           (mapconcat (lambda (headline) (plist-get headline :html))
+                                      newest-to-oldest-headlines
+                                      "\n")
+                           "</ul>")))
+    (org-export-website-template contents info)))
+
+(defun org-export-blog-index-headline (headline _contents info)
+  (let* ((post-id (org-element-property :POST_ID headline)))
+    (when post-id
+      (let* ((title (org-element-property :raw-value headline))
+             (published-at (org-time-string-to-time (org-element-property :PUBLISHED_AT headline)))
+             (published-at-string (format-time-string "%Y-%m-%d" published-at))
+             (headlines (plist-get info :headlines)))
+        (plist-put info :headlines
+                   (cons (list
+                          :published-at published-at
+                          :html (concat "<li>"
+                                        "<a href=\"posts/" post-id "\">"
+                                        title
+                                        "</a>"
+                                        "<br />"
+                                        "<time datetime=\"" published-at-string "\">"
+                                        published-at-string
+                                        "</time>"
+                                        "</li>"))
+                         headlines))
+        ""))))
+
+;;; Helper functions
+
 (defun replace-placeholder-with-indent (placeholder replacement string)
   (let* ((placeholder-indent (regexp-match-column placeholder string))
          (replacement-lines (split-string replacement "\n"))

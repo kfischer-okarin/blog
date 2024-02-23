@@ -29,8 +29,8 @@
 
 * It starts with an @
   :PROPERTIES:
-  :SERIES_ID: cyberpunk-rl
-  :SERIES_POST_NUMBER: 1
+  :POST_ID: it_starts_with_an_at
+  :SERIES: CyberpunkRL
   :PUBLISHED_AT: [2024-02-15 Thu 23:21]
   :END:
   Today I participated in a so called /mokumoku-kai/ (もくもく会) for the first time - a Japanese style of meetup where
@@ -76,8 +76,7 @@
 
 * My own four walls
   :PROPERTIES:
-  :SERIES_ID: cyberpunk-rl
-  :SERIES_POST_NUMBER: 2
+  :SERIES_ID: CyberpunkRL
   :END:
   Last week I left off with having an at sign walking across the screen. That is already a nice start and the next
   logical step would be to add some walls to restrict the player's movement as well as a door which can be opened and
