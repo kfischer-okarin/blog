@@ -6,23 +6,36 @@
 
 body {
     font-family: 'E-Keet Pixelwood', sans-serif;
+    --grid-column-width: calc(100% / 12);
 }
 
 .content-columns-root {
     display: flex;
 }
 
+.content-columns-root > * {
+    flex-grow: 0;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
 .left-spacer {
-    flex: 1;
+    --column-width: calc(var(--grid-column-width) * 1);
+    flex-basis: var(--column-width);
+    max-width: var(--column-width);
 }
 
 .content-column {
-    flex: 8;
+    --column-width: calc(var(--grid-column-width) * 8);
+    flex-basis: var(--column-width);
+    max-width: var(--column-width);
     padding: 3rem 10%;
 }
 
 .right-spacer {
-    flex: 3;
+    --column-width: calc(var(--grid-column-width) * 3);
+    flex-basis: var(--column-width);
+    max-width: var(--column-width);
 }
 
 .footnotes li {
