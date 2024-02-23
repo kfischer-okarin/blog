@@ -20,25 +20,27 @@
 
 (defun org-export-website-headline (headline contents info)
   (let* ((level (org-element-property :level headline))
-         (title (org-element-property :raw-value headline))
-         (html-heading (format "<h%d>%s</h%d>" level title level))
-         (body-part (when contents (concat "\n\n" contents)))
-         (footnotes-part
-          (when (eq level 1)
-            (let ((footnotes (plist-get info :footnotes)))
-              (when footnotes
-                (concat "\n\n"
-                        "<div class=\"footnotes\">"
-                        "<ol>"
-                        (mapconcat (lambda (footnote) (concat "<li>" footnote "</li>")) footnotes)
-                        "</ol>"
-                        "</div>")))))
          (published-at (org-element-property :PUBLISHED_AT headline))
          (should-process (or (> level 1) published-at)))
     (when should-process
-      (when (eq level 1)
-        (plist-put info :footnotes nil))
-      (concat html-heading body-part footnotes-part))))
+      (let ((footnotes-part
+             (when (eq level 1)
+               (concat "\n\n"
+                       (org-export-website--build-footnotes (plist-get info :footnotes))))))
+        (when (eq level 1)
+          (plist-put info :footnotes nil))
+        (let* ((title (org-element-property :raw-value headline))
+               (html-heading (format "<h%d>%s</h%d>" level title level))
+               (body-part (when contents (concat "\n\n" contents))))
+          (concat html-heading body-part footnotes-part))))))
+
+(defun org-export-website--build-footnotes (footnotes)
+  (when footnotes
+    (concat "<div class=\"footnotes\">"
+            "<ol>"
+            (mapconcat (lambda (footnote) (concat "<li>" footnote "</li>")) footnotes)
+            "</ol>"
+            "</div>")))
 
 (defun org-export-website-section (section contents _info)
   contents)
