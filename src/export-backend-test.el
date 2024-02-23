@@ -5,11 +5,12 @@
    "\n"))
 
 (defun export-org-lines (&rest lines)
-  (let ((org-export-website-template-string "{{ content }}")
-        (org-content (apply #'concat-lines lines)))
+  (let ((org-content (apply #'concat-lines lines)))
     (with-temp-buffer
       (insert org-content)
-      (string-trim-right (org-export-as org-export-website-backend)))))
+      (string-trim-right
+       (org-export-as org-export-website-backend nil nil nil
+                      '(:page-template "{{ content }}"))))))
 
 (defun article-headline (title &optional published-at)
   (concat-lines (concat "* " title)

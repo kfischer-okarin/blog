@@ -12,11 +12,10 @@
                                                      (plain-list . org-export-website-plain-list)
                                                      (item . org-export-website-item))))
 
-(defvar org-export-website-template-string)
-
 (defun org-export-website-template (contents info)
-  (let* ((contents-placeholder-indent (regexp-match-column "{{ content }}" org-export-website-template-string)))
-    (replace-placeholder-with-indent "{{ content }}" contents org-export-website-template-string)))
+  (let* ((page-template (plist-get info :page-template))
+         (contents-placeholder-indent (regexp-match-column "{{ content }}" page-template)))
+    (replace-placeholder-with-indent "{{ content }}" contents page-template)))
 
 (defun org-export-website-headline (headline contents info)
   (let* ((level (org-element-property :level headline))

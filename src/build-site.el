@@ -26,10 +26,9 @@
   (let ((org-babel-load-languages
          '((mermaid . t)))
         (org-confirm-babel-evaluate
-         (lambda (lang body) (not (string= lang "mermaid"))))
-        (org-export-website-template-string
-         (read-file-as-string "templates/index.html")))
-    (org-export-as org-export-website-backend)))
+         (lambda (lang body) (not (string= lang "mermaid")))))
+    (org-export-as org-export-website-backend nil nil nil
+                   `(:page-template ,(read-file-as-string "templates/index.html")))))
 
 (shell-command-with-echo "git clean -fx ./dist")
 (shell-command-with-echo "git clean -fx ./images")
