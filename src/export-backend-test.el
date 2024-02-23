@@ -74,6 +74,14 @@
                                    "#+end_src")
                  "<pre><code class=\"language-python\">print('foo')\n\n1 + 2\n</code></pre>")))
 
+(ert-deftest test-org-export-website-plain-list ()
+  (should (equal (export-org-lines "- foo"
+                                   "- bar")
+                 (concat-lines "<ul>"
+                               "<li>foo</li>"
+                               "<li>bar</li>"
+                               "</ul>"))))
+
 (ert-deftest test-regexp-match-column ()
   (should (equal (regexp-match-column "b\\w\\w" "foo\nfoo bar baz") 4)))
 

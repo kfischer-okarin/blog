@@ -111,10 +111,14 @@
 (defun org-export-website-plain-list (plain-list contents _info)
   (let* ((type (org-element-property :type plain-list))
          (tag (if (string= type "ordered") "ol" "ul")))
-    (concat "<" tag ">" contents "</" tag ">")))
+    (concat "<" tag ">\n"
+            contents
+            "</" tag ">")))
 
 (defun org-export-website-item (item contents _info)
-  (concat "<li>" contents "</li>"))
+  (concat "<li>"
+          (string-trim contents "\\(<p>\\|[ \t\n\r]\\)+" "\\(</p>\\|[ \t\n\r]\\)+")
+          "</li>\n"))
 
 (defun replace-placeholder-with-indent (placeholder replacement string)
   (let* ((placeholder-indent (regexp-match-column placeholder string))
