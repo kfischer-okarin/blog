@@ -1,9 +1,12 @@
+#+AUTHOR: Kevin Fischer
+
 #+STARTUP: overview
 #+STARTUP: inlineimages
 #+STARTUP: fninline
 #+PROPERTY: header-args:mermaid :theme dark
 #+PROPERTY: header-args:mermaid+ :file (kf-mermaid-result-filename)
 #+PROPERTY: header-args:mermaid+ :exports results
+
 
 * Capturing all my git commits with org mode
   :PROPERTIES:

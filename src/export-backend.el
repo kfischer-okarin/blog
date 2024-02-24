@@ -11,11 +11,13 @@
                                                      (footnote-reference . org-export-website-footnote-reference)
                                                      (plain-list . org-export-website-plain-list)
                                                      (item . org-export-website-item))
-                                      :options '((:media-path nil nil "."))))
+                                      :options '((:author "AUTHOR" nil nil t)
+                                                 (:media-path nil nil "."))))
 
 (defun org-export-website-template (contents info)
   (replace-placeholders
    (plist-get info :page-template)
+   "{{ author }}" (plist-get info :author)
    "{{ content }}" contents
    "{{ stylesheet-path }}" (plist-get info :stylesheet-path)
    "{{ title }}" (plist-get info :title)
@@ -138,7 +140,8 @@
 
 (defconst org-export-blog-index-backend (org-export-create-backend
                                          :transcoders '((template . org-export-blog-index-template)
-                                                        (headline . org-export-blog-index-headline))))
+                                                        (headline . org-export-blog-index-headline))
+                                         :options (org-export-backend-options org-export-website-backend)))
 
 (defun org-export-blog-index-template (_contents info)
   (let* ((newest-to-oldest-headlines
