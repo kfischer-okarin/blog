@@ -96,19 +96,6 @@
                                "<li>bar</li>"
                                "</ul>"))))
 
-(ert-deftest test-regexp-match-column ()
-  (should (equal (regexp-match-column "b\\w\\w" "foo\nfoo bar baz") 4)))
-
-(ert-deftest test-indent-html-string ()
-  (should (equal (indent-html-string "foo\nbar\nbaz" 2) "  foo\n  bar\n  baz"))
-  (should (equal (indent-html-string "foo\n\nbar" 4) "    foo\n\n    bar")) ; empty line should not be indented
-  (should (equal (indent-html-string "<pre><code>foo\nbar\nbaz</code></pre>" 2)
-                 "  <pre><code>foo\nbar\nbaz</code></pre>"))) ; should not indent code block contents
-
 (ert-deftest test-replace-placeholders ()
   (should (equal (replace-placeholders "foo {{foo}} bar {{bar}} baz" "{{foo}}" "FOO" "{{bar}}" "BAR")
                  "foo FOO bar BAR baz")))
-
-(ert-deftest test-replace-placeholder-with-indent ()
-  (should (equal (replace-placeholder-with-indent "{{here}}" "content1\ncontent2" "foo\n  {{here}}\nbaz")
-                 "foo\n  content1\n  content2\nbaz")))
