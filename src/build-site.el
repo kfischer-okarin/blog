@@ -22,8 +22,7 @@
 
 (defun export-article ()
   (interactive)
-  (let* ((article-title (org-get-heading t t t t))
-         (article-slug (org-entry-get (point) "POST_ID"))
+  (let* ((article-slug (org-entry-get (point) "POST_ID"))
          ; GitHub Pages will automatically redirect from /xyz to /xyz.html - just need to make sure the links are
          ; correct (i.e. not including the .html extension)
          (output-filename (concat "./dist/posts/" article-slug ".html")))
@@ -43,9 +42,7 @@
                           :stylesheet-path
                           "../styles.css"
                           :media-path
-                          "../"
-                          :title
-                          ,(concat article-title " - KF Labo Blog")))
+                          "../"))
          output-filename)))))
 
 (defun export-all-articles ()
@@ -61,8 +58,6 @@
                     ,(read-file-as-string "templates/index.html")
                     :stylesheet-path
                     "styles.css"
-                    :title
-                    "KF Labo Blog"
                     :description
                     ,(concat "Articles about Game Dev, TDD, maintainable software and possibly other random stuff I'm "
                              "interested in.")))

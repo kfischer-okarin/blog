@@ -11,16 +11,19 @@
                                                      (footnote-reference . org-export-website-footnote-reference)
                                                      (plain-list . org-export-website-plain-list)
                                                      (item . org-export-website-item))
+                                                 ; Overwrite author and title so they take simple strings and not lists
+                                                 ; (the last t means it will contain a single string)
                                       :options '((:author "AUTHOR" nil nil t)
+                                                 (:title "TITLE" nil nil t)
                                                  (:media-path nil nil "."))))
 
 (defun org-export-website-template (contents info)
   (replace-placeholders
    (plist-get info :page-template)
    "{{ author }}" (plist-get info :author)
+   "{{ title }}" (plist-get info :title)
    "{{ content }}" contents
    "{{ stylesheet-path }}" (plist-get info :stylesheet-path)
-   "{{ title }}" (plist-get info :title)
    "{{ description }}" (plist-get info :description)))
 
 (defun org-export-website-headline (headline contents info)
@@ -28,14 +31,15 @@
          (published-at (org-element-property :PUBLISHED_AT headline))
          (should-process (or (> level 1) published-at)))
     (when should-process
-      (let ((footnotes-part
+      (let ((title (org-element-property :raw-value headline))
+            (footnotes-part
              (when (eq level 1)
                (concat "\n\n"
                        (org-export-website--build-footnotes (plist-get info :footnotes))))))
         (when (eq level 1)
-          (plist-put info :footnotes nil))
-        (let* ((title (org-element-property :raw-value headline))
-               (section-start (when (eq level 2) "<section>\n"))
+          (plist-put info :footnotes nil)
+          (plist-put info :title (concat title " - " (plist-get info :title))))
+        (let* ((section-start (when (eq level 2) "<section>\n"))
                (section-end (when (eq level 2) "\n</section>"))
                (html-heading (format "<h%d>%s</h%d>" level title level))
                (body-part (when contents (concat "\n\n" contents))))
