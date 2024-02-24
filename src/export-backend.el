@@ -17,7 +17,8 @@
   (replace-placeholders
    (plist-get info :page-template)
    "{{ content }}" contents
-   "{{ stylesheet-path }}" (plist-get info :stylesheet-path)))
+   "{{ stylesheet-path }}" (plist-get info :stylesheet-path)
+   "{{ title }}" (plist-get info :title)))
 
 (defun org-export-website-headline (headline contents info)
   (let* ((level (org-element-property :level headline))
