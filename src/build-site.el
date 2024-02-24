@@ -44,7 +44,9 @@
                           :media-path
                           "../"
                           :url
-                          ,(concat (getenv "BLOG_URL") "posts/" article-slug)))
+                          ,(concat (getenv "BLOG_URL") "posts/" article-slug)
+                          :thumbnail-url
+                          ,(concat (getenv "BLOG_URL") "images/thumbnails/" article-slug ".jpg")))
          output-filename)))))
 
 (defun export-all-articles ()
