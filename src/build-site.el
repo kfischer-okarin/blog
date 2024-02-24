@@ -22,33 +22,32 @@
 
 (defun export-article ()
   (interactive)
-  (let ((org-babel-load-languages
-         '((mermaid . t)))
-        (org-confirm-babel-evaluate
-         (lambda (lang body) (not (string= lang "mermaid")))))
+  (let* ((article-slug (org-entry-get (point) "POST_ID"))
+         ; GitHub Pages will automatically redirect from /xyz to /xyz.html - just need to make sure the links are
+         ; correct (i.e. not including the .html extension)
+         (output-filename (concat "./dist/posts/" article-slug ".html")))
+    (log-message (concat "Exporting " output-filename "..."))
+    (if (file-exists-p output-filename)
+        (error (concat output-filename " already exists!")))
     (save-restriction
       (org-narrow-to-subtree)
-      (org-export-as org-export-website-backend nil nil nil
-                     `(:page-template
-                       ,(read-file-as-string "templates/index.html")
-                       :stylesheet-path
-                       "../styles.css"
-                       :media-path
-                       "../")))))
+      (let ((org-babel-load-languages
+             '((mermaid . t)))
+            (org-confirm-babel-evaluate
+             (lambda (lang body) (not (string= lang "mermaid")))))
+        (write-string-to-file
+         (org-export-as org-export-website-backend nil nil nil
+                        `(:page-template
+                          ,(read-file-as-string "templates/index.html")
+                          :stylesheet-path
+                          "../styles.css"
+                          :media-path
+                          "../"))
+         output-filename)))))
 
 (defun export-all-articles ()
   (org-map-entries
-   (lambda ()
-     (let* ((article-slug (org-entry-get (point) "POST_ID"))
-            (published-at (org-time-string-to-time (org-entry-get (point) "PUBLISHED_AT")))
-            ; GitHub Pages will automatically redirect from /xyz to /xyz.html - just need to make sure the links are
-            ; correct (i.e. not including the .html extension)
-            (filename (concat "./dist/posts/" article-slug ".html")))
-       (log-message (concat "Exporting " filename "..."))
-       (if (file-exists-p filename)
-           (error (concat filename " already exists!")))
-       (write-string-to-file (export-article) filename)
-       '(:article-slug article-slug :published-at published-at)))
+   #'export-article
    "POST_ID<>\"\""
    'file))
 
