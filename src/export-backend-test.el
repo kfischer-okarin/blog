@@ -105,6 +105,10 @@
   (should (equal (indent-html-string "<pre><code>foo\nbar\nbaz</code></pre>" 2)
                  "  <pre><code>foo\nbar\nbaz</code></pre>"))) ; should not indent code block contents
 
+(ert-deftest test-replace-placeholders ()
+  (should (equal (replace-placeholders "foo {{foo}} bar {{bar}} baz" "{{foo}}" "FOO" "{{bar}}" "BAR")
+                 "foo FOO bar BAR baz")))
+
 (ert-deftest test-replace-placeholder-with-indent ()
   (should (equal (replace-placeholder-with-indent "{{here}}" "content1\ncontent2" "foo\n  {{here}}\nbaz")
                  "foo\n  content1\n  content2\nbaz")))

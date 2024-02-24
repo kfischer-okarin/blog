@@ -14,16 +14,10 @@
                                       :options '((:media-path nil nil "."))))
 
 (defun org-export-website-template (contents info)
-  (let* ((page-template (plist-get info :page-template))
-         (stylesheet-path (plist-get info :stylesheet-path))
-         (contents-placeholder-indent (regexp-match-column "{{ content }}" page-template)))
-    (replace-regexp-in-string
-     "{{ stylesheet-path }}"
-     stylesheet-path
-     (replace-placeholder-with-indent
-      "{{ content }}"
-      contents
-      page-template))))
+  (replace-placeholders
+   (plist-get info :page-template)
+   "{{ content }}" contents
+   "{{ stylesheet-path }}" (plist-get info :stylesheet-path)))
 
 (defun org-export-website-headline (headline contents info)
   (let* ((level (org-element-property :level headline))
@@ -178,6 +172,12 @@
         ""))))
 
 ;;; Helper functions
+
+(defun replace-placeholders (template &rest replacements)
+  (while replacements
+    (setq template (replace-regexp-in-string (car replacements) (cadr replacements) template))
+    (setq replacements (cddr replacements)))
+  template)
 
 (defun replace-placeholder-with-indent (placeholder replacement string)
   (let* ((placeholder-indent (regexp-match-column placeholder string))
