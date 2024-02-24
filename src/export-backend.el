@@ -57,7 +57,7 @@
 (defun org-export-website-paragraph (paragraph contents info)
   (let ((description (plist-get info :description)))
     (unless description
-      (plist-put info :description (remove-html-tags contents))))
+      (plist-put info :description (remove-html-tags (shorten-and-normalize-whitespace contents)))))
   (concat "<p>" contents "</p>"))
 
 (defun org-export-website-link (link contents _info)
@@ -186,6 +186,9 @@
 
 (defun remove-html-tags (string)
   (replace-regexp-in-string "<[^>]+>" "" string))
+
+(defun shorten-and-normalize-whitespace (string)
+  (replace-regexp-in-string "[ \n\t]+" " " string))
 
 ; For debugging
 (defun print-element (element)

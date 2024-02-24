@@ -54,13 +54,14 @@
                                ""
                                "<div class=\"footnotes\"><ol><li><a href=\"#fnref-1\" id=\"fn-1\">[1]</a> not telling you</li></ol></div>"))))
 
-(ert-deftest test-org-export-website-first-paragraph-without-markup-becomes-description ()
+(ert-deftest test-org-export-website-first-paragraph-without-markup-and-newlines-becomes-description ()
   (should (equal (export-org-lines-with-options '(:page-template "{{ description }}")
                                                 (article-headline "foo")
                                                 "Some /content/"
+                                                "with newlines."
                                                 ""
                                                 "More content")
-                 "Some content")))
+                 "Some content with newlines.")))
 
 (ert-deftest test-org-export-website-link-http-https ()
   (should (equal (export-org-lines "[[http://example.com][Link Text]]")
@@ -110,4 +111,8 @@
 
 (ert-deftest test-remove-html-tags ()
   (should (equal (remove-html-tags "<p>Some <em>emphasized</em> text and a <a href=\"somewhere\">link</a>.</p>")
-                  "Some emphasized text and a link.")))
+                 "Some emphasized text and a link.")))
+
+(ert-deftest test-shorten-and-normalize-whitespace ()
+  (should (equal (shorten-and-normalize-whitespace "Some \n content\n\twith\nnewlines.")
+                 "Some content with newlines.")))
