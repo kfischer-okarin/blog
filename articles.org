@@ -81,17 +81,69 @@
 
 * My own four walls
   :PROPERTIES:
-  :SERIES_ID: CyberpunkRL
+  :SERIES: CyberpunkRL
   :END:
-  Last week I left off with having an at sign walking across the screen. That is already a nice start and the next
-  logical step would be to add some walls to restrict the player's movement as well as a door which can be opened and
-  closed via a button press.
+  Last week I finished with an at sign walking across the screen. That is already a nice start and the next thing I'd
+  wanted to do was adding some walls to restrict the player's movement as well as a door which can be opened and closed
+  via button press.
 
-** Separating the player's action and their execution
-   In order to implement walls I will need check whether I can actually move in the direction I pressed.
+** Separating input and execution
+   In order to implement walls I will need to check whether I can actually move in the direction I pressed before
+   executing the movement.
 
    Since the current, very simple first version of my movement code immediately and directly updates the player's
-   position when an arrow key is pressed, adding such a check would
+   position when an arrow key is pressed, naively adding such a check to each of the four directions would introduce
+   unwelcome duplication into my input handling code. Because the movement check is probably something that is going to
+   evolve quite a bit as the game becomes more complex, duplication would definitely mean that this would be harder to
+   change.
+
+   One thing I do usually very early when creating a game is separating the game logic from the input parsing - by
+   transforming the input values into an intermediate data structure, which I like to call *Input Action*. And in this
+   case it would naturally help us the aforementioned duplication.
+
+   For now I'll be going with a simple hash (which are really cheap to create in DragonRuby) containing a ~:type~ key
+   which specifies the type of input action together with other action specific parameters.
+
+   In my game's case that would look like this for the movement:
+
+   #+begin_src ruby
+     player_action = {}
+     keyboard = args.inputs.keyboard
+     if keyboard.key_down.up
+       player_action = { type: :move, direction: { x:  0, y:  1 } }
+     elsif keyboard.key_down.down
+       player_action = { type: :move, direction: { x:  0, y: -1 } }
+     elsif keyboard.key_down.left
+       player_action = { type: :move, direction: { x: -1, y:  0 } }
+     elsif keyboard.key_down.right
+       player_action = { type: :move, direction: { x:  1, y:  0 } }
+     end
+   #+end_src
+
+   And later in the tick when handling the player input action we can use a simple case statement like this:
+
+   #+begin_src ruby
+     case player_action[:type]
+     when :move
+       player_position[:x] += player_action[:direction][:x]
+       player_position[:y] += player_action[:direction][:y]
+     end
+   #+end_src
+
+   We can easily add the check here, but first let's create some walls.
+
+** Creating a map data structure
+   We will need a data structure where we specify which map cells contain walls.
+
+   For now let's keep it simple and stupid and just create a nested array:
+
+   #+begin_src ruby
+     # Somewhere at the beginning of the tick
+     args.state.current_map ||= 40.times.map { 22.times.map { {} } }
+   #+end_src
+
+   This will give us a 40 by 22 array filled with empty hashes (I like to arrange two dimensional arrays by columns so
+   that I can access them intuitively via ~array[x][y]~).
 
 ** Adding a reset hotkey
 
@@ -109,7 +161,8 @@
 
 ** A Video
 
-   [[file:videos/cyberpunk-rl-0002-walls-and-a-door][Leaving the room]]
+   [[file:videos/cyberpunk-rl-0002-walls-and-a-door.mp4][Leaving the room]]
+
 
 * File Settings                                                    :noexport:
   Local Variables:
