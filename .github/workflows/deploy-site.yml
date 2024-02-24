@@ -42,6 +42,8 @@ jobs:
       - name: Install mermaid-cli
         run: npm install -g @mermaid-js/mermaid-cli
       - name: Build site
+        env:
+          BLOG_URL: ${{ secrets.BLOG_URL }}
         run: ./scripts/build-site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

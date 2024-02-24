@@ -42,7 +42,9 @@
                           :stylesheet-path
                           "../styles.css"
                           :media-path
-                          "../"))
+                          "../"
+                          :url
+                          ,(concat (getenv "BLOG_URL") "posts/" article-slug)))
          output-filename)))))
 
 (defun export-all-articles ()
@@ -57,7 +59,9 @@
                   `(:page-template
                     ,(read-file-as-string "templates/index.html")
                     :stylesheet-path
-                    "styles.css"))
+                    "styles.css"
+                    :url
+                    ,(getenv "BLOG_URL")))
    "./dist/index.html"))
 
 (load-file "./src/export-backend.el")

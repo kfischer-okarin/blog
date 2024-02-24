@@ -24,6 +24,7 @@
    "{{ author }}" (plist-get info :author)
    "{{ title }}" (plist-get info :title)
    "{{ description }}" (plist-get info :description)
+   "{{ url }}" (plist-get info :url)
    "{{ content }}" contents
    "{{ stylesheet-path }}" (plist-get info :stylesheet-path)))
 
