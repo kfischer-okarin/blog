@@ -57,10 +57,7 @@
                   `(:page-template
                     ,(read-file-as-string "templates/index.html")
                     :stylesheet-path
-                    "styles.css"
-                    :description
-                    ,(concat "Articles about Game Dev, TDD, maintainable software and possibly other random stuff I'm "
-                             "interested in.")))
+                    "styles.css"))
    "./dist/index.html"))
 
 (load-file "./src/export-backend.el")

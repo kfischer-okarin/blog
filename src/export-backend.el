@@ -15,6 +15,7 @@
                                                  ; (the last t means it will contain a single string)
                                       :options '((:author "AUTHOR" nil nil t)
                                                  (:title "TITLE" nil nil t)
+                                                 (:description "DESCRIPTION" nil nil t)
                                                  (:media-path nil nil "."))))
 
 (defun org-export-website-template (contents info)
@@ -22,9 +23,9 @@
    (plist-get info :page-template)
    "{{ author }}" (plist-get info :author)
    "{{ title }}" (plist-get info :title)
+   "{{ description }}" (plist-get info :description)
    "{{ content }}" contents
-   "{{ stylesheet-path }}" (plist-get info :stylesheet-path)
-   "{{ description }}" (plist-get info :description)))
+   "{{ stylesheet-path }}" (plist-get info :stylesheet-path)))
 
 (defun org-export-website-headline (headline contents info)
   (let* ((level (org-element-property :level headline))
@@ -38,7 +39,10 @@
                        (org-export-website--build-footnotes (plist-get info :footnotes))))))
         (when (eq level 1)
           (plist-put info :footnotes nil)
-          (plist-put info :title (concat title " - " (plist-get info :title))))
+          (plist-put info :title (concat title " - " (plist-get info :title)))
+          ; Prioritize specific description over the one generated from the first paragraph
+          (when (org-element-property :EXPORT_DESCRIPTION headline)
+            (plist-put info :description (org-element-property :EXPORT_DESCRIPTION headline))))
         (let* ((section-start (when (eq level 2) "<section>\n"))
                (section-end (when (eq level 2) "\n</section>"))
                (html-heading (format "<h%d>%s</h%d>" level title level))
@@ -61,9 +65,10 @@
   contents)
 
 (defun org-export-website-paragraph (paragraph contents info)
-  (let ((description (plist-get info :description)))
-    (unless description
-      (plist-put info :description (remove-html-tags (shorten-and-normalize-whitespace contents)))))
+  (let ((description-updated (plist-get info :description-updated)))
+    (unless description-updated
+      (plist-put info :description (remove-html-tags (shorten-and-normalize-whitespace contents)))
+      (plist-put info :description-updated t)))
   (concat "<p>" contents "</p>"))
 
 (defun org-export-website-link (link contents _info)

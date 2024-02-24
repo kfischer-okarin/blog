@@ -1,5 +1,6 @@
 #+AUTHOR: Kevin Fischer
 #+TITLE: KF Labo Blog
+#+DESCRIPTION: Articles about Game Dev, TDD, maintainable software and possibly other random stuff I'm interested in.
 
 #+STARTUP: overview
 #+STARTUP: inlineimages

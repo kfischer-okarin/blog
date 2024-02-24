@@ -63,6 +63,16 @@
                                                 "More content")
                  "Some content with newlines.")))
 
+(ert-deftest test-org-export-website-description-can-be-overwritten ()
+  (should (equal (export-org-lines-with-options '(:page-template "{{ description }}")
+                                                "* foo"
+                                                ":PROPERTIES:"
+                                                ":PUBLISHED_AT: [2024-02-16 Fri 00:21]"
+                                                ":EXPORT_DESCRIPTION: Overwritten description."
+                                                ":END:"
+                                                "This will not be used as description.")
+                  "Overwritten description.")))
+
 (ert-deftest test-org-export-website-link-http-https ()
   (should (equal (export-org-lines "[[http://example.com][Link Text]]")
                  "<p><a href=\"http://example.com\">Link Text</a></p>"))
