@@ -13,7 +13,7 @@
       (insert org-content)
       (string-trim-right
        (org-export-as org-export-website-backend nil nil nil
-                      (append options '(:page-template "{{ content }}")))))))
+                      (org-combine-plists '(:page-template "{{ content }}") options))))))
 
 (defun article-headline (title &optional published-at)
   (concat-lines (concat "* " title)
@@ -53,6 +53,14 @@
                                ""
                                ""
                                "<div class=\"footnotes\"><ol><li><a href=\"#fnref-1\" id=\"fn-1\">[1]</a> not telling you</li></ol></div>"))))
+
+(ert-deftest test-org-export-website-first-paragraph-without-markup-becomes-description ()
+  (should (equal (export-org-lines-with-options '(:page-template "{{ description }}")
+                                                (article-headline "foo")
+                                                "Some /content/"
+                                                ""
+                                                "More content")
+                 "Some content")))
 
 (ert-deftest test-org-export-website-link-http-https ()
   (should (equal (export-org-lines "[[http://example.com][Link Text]]")
@@ -99,3 +107,7 @@
 (ert-deftest test-replace-placeholders ()
   (should (equal (replace-placeholders "foo {{foo}} bar {{bar}} baz" "{{foo}}" "FOO" "{{bar}}" "BAR")
                  "foo FOO bar BAR baz")))
+
+(ert-deftest test-remove-html-tags ()
+  (should (equal (remove-html-tags "<p>Some <em>emphasized</em> text and a <a href=\"somewhere\">link</a>.</p>")
+                  "Some emphasized text and a link.")))

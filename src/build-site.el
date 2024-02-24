@@ -62,7 +62,10 @@
                     :stylesheet-path
                     "styles.css"
                     :title
-                    "KF Labo Blog"))
+                    "KF Labo Blog"
+                    :description
+                    ,(concat "Articles about Game Dev, TDD, maintainable software and possibly other random stuff I'm "
+                             "interested in.")))
    "./dist/index.html"))
 
 (load-file "./src/export-backend.el")

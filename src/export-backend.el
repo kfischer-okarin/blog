@@ -18,7 +18,8 @@
    (plist-get info :page-template)
    "{{ content }}" contents
    "{{ stylesheet-path }}" (plist-get info :stylesheet-path)
-   "{{ title }}" (plist-get info :title)))
+   "{{ title }}" (plist-get info :title)
+   "{{ description }}" (plist-get info :description)))
 
 (defun org-export-website-headline (headline contents info)
   (let* ((level (org-element-property :level headline))
@@ -53,7 +54,10 @@
 (defun org-export-website-section (section contents _info)
   contents)
 
-(defun org-export-website-paragraph (paragraph contents _info)
+(defun org-export-website-paragraph (paragraph contents info)
+  (let ((description (plist-get info :description)))
+    (unless description
+      (plist-put info :description (remove-html-tags contents))))
   (concat "<p>" contents "</p>"))
 
 (defun org-export-website-link (link contents _info)
@@ -179,6 +183,9 @@
     (setq template (replace-regexp-in-string (car replacements) (cadr replacements) template))
     (setq replacements (cddr replacements)))
   template)
+
+(defun remove-html-tags (string)
+  (replace-regexp-in-string "<[^>]+>" "" string))
 
 ; For debugging
 (defun print-element (element)
