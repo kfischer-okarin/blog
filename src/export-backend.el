@@ -6,6 +6,7 @@
                                                      (section . org-export-website-section)
                                                      (paragraph . org-export-website-paragraph)
                                                      (link . org-export-website-link)
+                                                     (bold . org-export-website-bold)
                                                      (italic . org-export-website-italic)
                                                      (code . org-export-website-code)
                                                      (src-block . org-export-website-src-block)
@@ -102,6 +103,9 @@
          (url (org-element-property :raw-link link))
          (description (or contents url)))
     (concat "<a href=\"" url "\">" description "</a>")))
+
+(defun org-export-website-bold (bold contents _info)
+  (concat "<strong>" contents "</strong>"))
 
 (defun org-export-website-italic (italic contents _info)
   (concat "<em>" contents "</em>"))

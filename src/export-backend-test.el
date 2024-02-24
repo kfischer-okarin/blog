@@ -95,6 +95,10 @@
   (should (equal (export-org-lines-with-options '(:media-path "./media/") "[[file:video.mp4][Video Text]]")
                   "<p><figure><video controls width=\"640\"><source src=\"./media/video.mp4\" type=\"video/mp4\" /></video><figcaption>Video Text</figcaption></figure></p>")))
 
+(ert-deftest test-org-export-website-bold ()
+  (should (equal (export-org-lines "Some *bold* text.")
+                 "<p>Some <strong>bold</strong> text.</p>")))
+
 (ert-deftest test-org-export-website-italic ()
   (should (equal (export-org-lines "/foo/")
                  "<p><em>foo</em></p>")))
