@@ -101,11 +101,12 @@
 
 (ert-deftest test-org-export-website-src-block ()
   (should (equal (export-org-lines "#+begin_src python"
+                                   "  # some comment"
                                    "  print('foo')"
                                    ""
                                    "  1 + 2"
                                    "#+end_src")
-                 "<pre><code class=\"language-python\">print('foo')\n\n1 + 2\n</code></pre>")))
+                 "<pre><code class=\"language-python\"># some comment\nprint('foo')\n\n1 + 2\n</code></pre>")))
 
 (ert-deftest test-org-export-website-plain-list ()
   (should (equal (export-org-lines "- foo"
