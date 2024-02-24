@@ -7,6 +7,7 @@
                                                      (paragraph . org-export-website-paragraph)
                                                      (link . org-export-website-link)
                                                      (italic . org-export-website-italic)
+                                                     (code . org-export-website-code)
                                                      (src-block . org-export-website-src-block)
                                                      (footnote-reference . org-export-website-footnote-reference)
                                                      (plain-list . org-export-website-plain-list)
@@ -104,6 +105,9 @@
 
 (defun org-export-website-italic (italic contents _info)
   (concat "<em>" contents "</em>"))
+
+(defun org-export-website-code (code contents _info)
+  (concat "<code>" (org-element-property :value code) "</code>"))
 
 (defun org-export-website-src-block (src-block contents _info)
   (let* ((language (org-element-property :language src-block))

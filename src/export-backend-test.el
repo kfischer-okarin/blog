@@ -99,6 +99,10 @@
   (should (equal (export-org-lines "/foo/")
                  "<p><em>foo</em></p>")))
 
+(ert-deftest test-org-export-website-code ()
+  (should (equal (export-org-lines "Some ~code~.")
+                 "<p>Some <code>code</code>.</p>")))
+
 (ert-deftest test-org-export-website-src-block ()
   (should (equal (export-org-lines "#+begin_src python"
                                    "  # some comment"

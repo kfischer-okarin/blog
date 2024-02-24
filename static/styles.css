@@ -4,11 +4,26 @@
     src: url('fonts/e_keet_pixelwood.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'E-Keet 50Hz';
+    src: url('fonts/e_keet_50hz.ttf') format('truetype');
+}
+
 :root {
     font-family: 'E-Keet Pixelwood', sans-serif;
     font-size: 24px;
     letter-spacing: 1px;
     --grid-column-width: calc(100% / 12);
+}
+
+code {
+    font-family: 'E-Keet 50Hz', monospace;
+    font-size: 20px;
+    letter-spacing: -2px;
+}
+
+code:not(.hljs) {
+    color: #ab5656;
 }
 
 h1, h2, p, ol, ul, pre {
