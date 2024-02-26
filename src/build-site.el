@@ -39,8 +39,8 @@
          (org-export-as org-export-website-backend nil nil nil
                         `(:page-template
                           ,(read-file-as-string "templates/index.html")
-                          :stylesheet-path
-                          "../styles.css"
+                          :static-files-path
+                          ".."
                           :media-path
                           "../"
                           :url
@@ -60,8 +60,8 @@
    (org-export-as org-export-blog-index-backend nil nil nil
                   `(:page-template
                     ,(read-file-as-string "templates/index.html")
-                    :stylesheet-path
-                    "styles.css"
+                    :static-files-path
+                    "."
                     :url
                     ,(getenv "BLOG_URL")))
    "./dist/index.html"))
