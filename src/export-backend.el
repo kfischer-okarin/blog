@@ -113,9 +113,13 @@
 (defun org-export-website-code (code contents _info)
   (concat "<code>" (org-element-property :value code) "</code>"))
 
-(defun org-export-website-src-block (src-block contents _info)
+(defun org-export-website-src-block (src-block _contents _info)
   (let* ((language (org-element-property :language src-block))
-         (code-lines (split-string (org-element-property :value src-block) "\n"))
+         (code (org-element-property :value src-block)))
+    (org-export-website-src-block--build-html language code)))
+
+(defun org-export-website-src-block--build-html (language code)
+  (let* ((code-lines (split-string code "\n"))
          (indent (string-match "[^ ]" (nth 0 code-lines))))
     (concat "<pre><code class=\"language-" language "\">"
             (mapconcat
