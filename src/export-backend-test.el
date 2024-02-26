@@ -120,6 +120,26 @@
                                ""
                                "1 + 2"
                                "</code></pre>"
+                               "</div>")))
+  (should (equal (export-org-lines "#+begin_src ruby"
+                                   "  1 + 2"
+                                   "  3 + 4"
+                                   "  # ======="
+                                   "  5 + 6"
+                                   "  7 + 8"
+                                   "#+end_src")
+                 (concat-lines "<div class=\"code-block diff\">"
+                               "<div class=\"diff-left\">"
+                               "<pre><code class=\"language-ruby\">1 + 2"
+                               "3 + 4"
+                               "</code></pre>"
+                               "</div>"
+                               "<div class=\"diff-slider\"></div>"
+                               "<div class=\"diff-right\">"
+                               "<pre><code class=\"language-ruby\">5 + 6"
+                               "7 + 8"
+                               "</code></pre>"
+                               "</div>"
                                "</div>"))))
 
 (ert-deftest test-org-export-website-plain-list ()

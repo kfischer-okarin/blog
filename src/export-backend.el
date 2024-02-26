@@ -115,10 +115,29 @@
 
 (defun org-export-website-src-block (src-block _contents _info)
   (let* ((language (org-element-property :language src-block))
-         (code (org-element-property :value src-block)))
-    (concat "<div class=\"code-block\">\n"
-            (org-export-website-src-block--build-html language code) "\n"
-            "</div>")))
+         (code (org-element-property :value src-block))
+         (is-diff-code-block (string-match-p "# =======\n" code)))
+    (if is-diff-code-block
+        (org-export-website-src-block--build-diff-code-block language code)
+      (org-export-website-src-block--build-simple-code-block language code))))
+
+(defun org-export-website-src-block--build-simple-code-block (language code)
+  (concat "<div class=\"code-block\">\n"
+          (org-export-website-src-block--build-html language code) "\n"
+          "</div>"))
+
+(defun org-export-website-src-block--build-diff-code-block (language code)
+  (let ((indent (string-match "[^ ]" code)))
+    (pcase-let ((`(,left ,right) (split-string code "# =======\n")))
+      (concat "<div class=\"code-block diff\">\n"
+              "<div class=\"diff-left\">\n"
+              (org-export-website-src-block--build-html language left) "\n"
+              "</div>\n"
+              "<div class=\"diff-slider\"></div>\n"
+              "<div class=\"diff-right\">\n"
+              (org-export-website-src-block--build-html language right) "\n"
+              "</div>\n"
+              "</div>"))))
 
 (defun org-export-website-src-block--build-html (language code)
   (let* ((code-lines (split-string code "\n"))

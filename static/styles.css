@@ -31,10 +31,6 @@ h1, h2, p, ol, ul, .code-block {
     margin-bottom: 1.75rem;
 }
 
-.code-block > pre {
-    margin: 0;
-}
-
 h1 {
     font-size: 2.25rem;
 }
@@ -48,6 +44,13 @@ h2 {
     margin-bottom: 0.5rem;
 }
 
+/* === Code blocks === */
+.code-block {
+    pre {
+        margin: 0;
+    }
+}
+
 /* Reduce margin of paragraphs before code blocks */
 p:has(+ .code-block) {
     margin-bottom: 0.25rem;
@@ -55,6 +58,42 @@ p:has(+ .code-block) {
 
 pre code.hljs {
     font-size: 14px;
+}
+
+.code-block.diff {
+    display: flex;
+
+    .diff-left {
+        width: 100%;
+
+        pre {
+            height: 100%;
+
+            code {
+                height: 100%;
+                box-sizing: border-box;
+            }
+        }
+    }
+
+    .diff-slider {
+        width: 10px;
+        background-color: black;
+        cursor: ew-resize;
+    }
+
+    .diff-right {
+        pre {
+            height: 100%;
+            overflow: hidden;
+
+            code {
+                height: 100%;
+                overflow: hidden;
+                box-sizing: border-box;
+            }
+        }
+    }
 }
 
 .content-columns-root {
