@@ -116,7 +116,9 @@
 (defun org-export-website-src-block (src-block _contents _info)
   (let* ((language (org-element-property :language src-block))
          (code (org-element-property :value src-block)))
-    (org-export-website-src-block--build-html language code)))
+    (concat "<div class=\"code-block\">\n"
+            (org-export-website-src-block--build-html language code) "\n"
+            "</div>")))
 
 (defun org-export-website-src-block--build-html (language code)
   (let* ((code-lines (split-string code "\n"))

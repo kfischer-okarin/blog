@@ -114,7 +114,13 @@
                                    ""
                                    "  1 + 2"
                                    "#+end_src")
-                 "<pre><code class=\"language-python\"># some comment\nprint('foo')\n\n1 + 2\n</code></pre>")))
+                 (concat-lines "<div class=\"code-block\">"
+                               "<pre><code class=\"language-python\"># some comment"
+                               "print('foo')"
+                               ""
+                               "1 + 2"
+                               "</code></pre>"
+                               "</div>"))))
 
 (ert-deftest test-org-export-website-plain-list ()
   (should (equal (export-org-lines "- foo"
