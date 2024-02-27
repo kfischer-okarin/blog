@@ -20,6 +20,16 @@
     (insert string)
     (write-file file)))
 
+(defun file-last-changed-commit (file)
+  (string-trim (shell-command-to-string (concat "git log -1 --format=%H " file))))
+
+; Generate query strings for static files to cause a cache miss when the file changes
+(defun styles-url ()
+  (concat "styles.css?version=" (file-last-changed-commit "./static/styles.css")))
+
+(defun diff-slider-js-url ()
+  (concat "diff_slider.js?version=" (file-last-changed-commit "./static/diff_slider.js")))
+
 (defun export-article ()
   (interactive)
   (let* ((article-slug (org-entry-get (point) "POST_ID"))
@@ -39,8 +49,10 @@
          (org-export-as org-export-website-backend nil nil nil
                         `(:page-template
                           ,(read-file-as-string "templates/index.html")
-                          :static-files-path
-                          ".."
+                          :styles-url
+                          ,(concat "../" (styles-url))
+                          :diff-slider-js-url
+                          ,(concat "../" (diff-slider-js-url))
                           :media-path
                           "../"
                           :url
@@ -60,8 +72,10 @@
    (org-export-as org-export-blog-index-backend nil nil nil
                   `(:page-template
                     ,(read-file-as-string "templates/index.html")
-                    :static-files-path
-                    "."
+                    :styles-url
+                    ,(concat "./" (styles-url))
+                    :diff-slider-js-url
+                    ,(concat "./" (diff-slider-js-url))
                     :url
                     ,(getenv "BLOG_URL")))
    "./dist/index.html"))

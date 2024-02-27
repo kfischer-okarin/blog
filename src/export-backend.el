@@ -29,7 +29,8 @@
    "{{ url }}" (plist-get info :url)
    "{{ thumbnail-url }}" (or (plist-get info :thumbnail-url) "")
    "{{ content }}" contents
-   "{{ static-files-path }}" (plist-get info :static-files-path)))
+   "{{ styles-url }}" (plist-get info :styles-url)
+   "{{ diff-slider-js-url }}" (plist-get info :diff-slider-js-url)))
 
 (defun org-export-website-headline (headline contents info)
   (let* ((level (org-element-property :level headline))
