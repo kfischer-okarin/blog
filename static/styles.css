@@ -101,6 +101,7 @@ pre code.hljs {
     height: 20px;
     display: flex;
     align-items: center;
+    user-select: none;
 
     span {
         font-size: 30px;
