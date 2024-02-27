@@ -21,7 +21,7 @@
     (write-file file)))
 
 (defun file-last-changed-commit (file)
-  (string-trim (shell-command-to-string (concat "git log -1 --format=%H " file))))
+  (string-trim (shell-command-to-string (concat "git log -1 --format=%H -- " file))))
 
 ; Generate query strings for static files to cause a cache miss when the file changes
 (defun styles-url ()
