@@ -52,7 +52,7 @@
 
   [[file:videos/cyberpunk-rl-0001-at-sign-moving.mp4][An at sign moving over the screen]]
 
-  And with DragonRuby that is just as simple as
+  And with DragonRuby that is just as simple as:
 
   #+begin_src ruby
     def tick(args)
@@ -81,7 +81,9 @@
 
 * My own four walls
   :PROPERTIES:
+  :POST_ID: my_own_four_walls
   :SERIES: CyberpunkRL
+  :PUBLISHED_AT: [2024-02-27 Tue 22:52]
   :END:
   Last week I finished with an at sign walking across the screen. That is already a nice start and the next thing I'd
   wanted to do was adding some walls to restrict the player's movement as well as a door which can be opened and closed
@@ -98,7 +100,7 @@
    change.
 
    One thing I do usually very early when creating a game is separating the game logic from the input parsing - by
-   transforming the input values into an intermediate data structure, which I like to call *Input Action*. And in this
+   transforming the input values into an intermediate data structure, which I like to call /Input Action/. And in this
    case it would naturally help us the aforementioned duplication.
 
    For now I'll be going with a simple hash (which are really cheap to create in DragonRuby) containing a ~:type~ key
@@ -107,6 +109,17 @@
    In my game's case that would look like this for the movement:
 
    #+begin_src ruby
+     keyboard = args.inputs.keyboard
+     if keyboard.key_down.up
+       player_position[:y] += 1
+     elsif keyboard.key_down.down
+       player_position[:y] -= 1
+     elsif keyboard.key_down.left
+       player_position[:x] -= 1
+     elsif keyboard.key_down.right
+       player_position[:x] += 1
+     end
+     # =======
      player_action = {}
      keyboard = args.inputs.keyboard
      if keyboard.key_down.up
@@ -130,36 +143,340 @@
      end
    #+end_src
 
-   We can easily add the check here, but first let's create some walls.
-
-** Creating a map data structure
-   We will need a data structure where we specify which map cells contain walls.
-
-   For now let's keep it simple and stupid and just create a nested array:
-
-   #+begin_src ruby
-     # Somewhere at the beginning of the tick
-     args.state.current_map ||= 40.times.map { 22.times.map { {} } }
-   #+end_src
-
-   This will give us a 40 by 22 array filled with empty hashes (I like to arrange two dimensional arrays by columns so
-   that I can access them intuitively via ~array[x][y]~).
-
-** Adding a reset hotkey
+   We could now easily add the movement check here but to actually have anything the player could collide with, we will
+   first need to introduce a map data structure. And in order to comfortably render our map let's clean up our rendering
+   logic a bit.
 
 ** Refactoring the sprite rendering
+   Our very first hard coded sprite rendering looked like this:
 
-** DragonRuby hot reload trick - selectively resetting state
+   #+begin_src ruby
+     args.outputs.sprites << {
+       x: player_position[:x] * 32, y: player_position[:y] * 32, w: 32, h: 32,
+       path: 'sprites/zilk-16x16.png',
+       source_x: 0 * 16, source_y: 11 * 16, source_w: 16, source_h: 16
+     }
+   #+end_src
 
-** A good tricks works twice - authoring the map with hot reload
+   We are going to need to render other tiles from the same tileset, so as first step let's extract a ~tileset_sprite~
+   method:
 
-** Doing collisions
+   #+begin_src ruby
+     def tileset_sprite(tile_x, tile_y)
+       {
+         w: 32, h: 32,
+         path: 'sprites/zilk-16x16.png',
+         source_x: tile_x * 16, source_y: tile_y * 16, source_w: 16, source_h: 16
+       }
+     end
+   #+end_src
 
-** A door (?)
+   which will allow the sprite above to be simplified to:
 
-** Interacting with the door
+   #+begin_src ruby
+     args.outputs.sprites << tileset_sprite(0, 11).merge(
+       x: player_position[:x] * 32, y: player_position[:y] * 32
+     )
+   #+end_src
 
-** A Video
+   Instead of having a nondescript sprite from tile (0, 11) let's prepare a hash of named sprites used in the game:
+
+   #+begin_src ruby
+     def build_sprites
+       {
+         player: tileset_sprite(0, 11)
+       }
+     end
+   #+end_src
+
+   so we can change our tick parts like this
+
+   #+begin_src ruby
+     sprites = args.state.sprites ||= build_sprites
+
+     # ...
+
+     args.outputs.sprites << sprites[:player].merge(
+       x: player_position[:x] * 32, y: player_position[:y] * 32
+     )
+   #+end_src
+
+   One final improvement we can do is extracting a method for positioning a sprite on the grid:
+
+   #+begin_src ruby
+     def sprite_at_position(sprite, position)
+       sprite.merge(x: position[:x] * 32, y: position[:y] * 32)
+     end
+   #+end_src
+
+   which will cause our player sprite rendering to become a concise
+
+   #+begin_src ruby
+     args.outputs.sprites << sprite_at_position(sprites[:player], player_position)
+   #+end_src
+
+** Authoring a simple map using hot reloading
+   Now that we got ourselves a better rendering setup, let's start building a data structure for the map.
+
+   For now let's keep it simple and stupid and just create a nested array of hashes containing the cell information. To
+   get a nice interactive map editing workflow let's do a little file organizing trick:
+
+   #+begin_src ruby
+     # --- app/main.rb ---
+     def tick(args)
+       current_map = args.state.current_map ||= build_map
+       # ...
+     end
+
+     # --- app/map.rb ---
+     def build_map
+       result = 40.times.map { 22.times.map { {} } }
+       result[20][10][:wall] = true
+       result
+     end
+
+     $state.current_map = nil
+   #+end_src
+
+   This will give us a 40 by 22 array (which is the screen dimension for now) filled with empty hashes and a single wall
+   at coordinates (20, 10). For now a wall is just being represented by a ~wall: true~ value inside the cell hash.
+
+   I put the function building our map into a separate file combined with with a precisely targeted state reset
+   statement in the global scope. Now everytime I edit and save this file DragonRuby's hotloading will immediately
+   evaluate the new version of the file and the map state will be reinitialized to the newly edited version of the map.
+
+** Building ourselves a little prison
+   We have an editing workflow set up, so let's add some rendering, so we can actually see the walls we're adding:
+
+   #+begin_src ruby
+     # In the rendering part of the tick
+     current_map.each_with_index do |column, x|
+       column.each_with_index do |cell, y|
+         if cell[:wall]
+           args.outputs.sprites << sprite_at_position(sprites[:wall], { x: x, y: y })
+         end
+       end
+     end
+   #+end_src
+
+   Now we can update our ~build_map~ function to create four enclosing walls around us:
+
+   #+begin_src ruby
+     def build_map
+       result = 40.times.map { 22.times.map { {} } }
+       result[20][10][:wall] = true
+       result
+     end
+     # =======
+     def build_map
+       result = 40.times.map { 22.times.map { {} } }
+       # horizontal walls
+       result[14..25].each do |column|
+         column[15][:wall] = true
+         column[5][:wall] = true
+       end
+       # vertical walls
+       (6..14).each do |y|
+         result[14][y][:wall] = true
+         result[25][y][:wall] = true
+       end
+       result
+     end
+   #+end_src
+
+   Now that we can see walls around us, let's make them actually block our movement:
+
+   #+begin_src ruby
+     case player_action[:type]
+     when :move
+       player_position[:x] += player_action[:direction][:x]
+       player_position[:y] += player_action[:direction][:y]
+     end
+     # =======
+     case player_action[:type]
+     when :move
+       if can_move?(player_position, player_action[:direction], current_map)
+         player_position[:x] += player_action[:direction][:x]
+         player_position[:y] += player_action[:direction][:y]
+       end
+     end
+   #+end_src
+
+   With ~can_move?~ being defined as:
+
+   #+begin_src ruby
+     def can_move?(position, direction, current_map)
+       new_x = position[:x] + direction[:x]
+       new_y = position[:y] + direction[:y]
+       cell = cell_at(current_map, new_x, new_y)
+       !cell[:wall]
+     end
+
+     A_WALL = { wall: true }.freeze
+
+     def cell_at(current_map, x, y)
+       return A_WALL unless x.between?(0, current_map.length - 1)
+
+       column = current_map[x]
+       return A_WALL unless y.between?(0, column.length - 1)
+
+       column[y]
+     end
+   #+end_src
+
+   I abstracted the cell retrieval into its own method to be able to concisely take care of invalid
+   coordinates. Returning a wall cell for any invalid coordinates is a form of the so called /Null Object Pattern/ and
+   allows us to keep the main logic in ~can_move?~ clear and without many boundary condition checks.
+
+** A door to freedom
+   Now that we have walls, next let's build a door that we can open with the space key.
+
+   First let's make one of our wall tiles into a door. For this we will introduce a new key to our map cell hash:
+   ~:door~. Unlike ~:wall~ which is either there or not, a door needs to hold some state, namely whether its closed or
+   not.
+
+   #+begin_src ruby
+     def build_map
+       result = 40.times.map { 22.times.map { {} } }
+       # horizontal walls
+       result[14..25].each do |column|
+         column[15][:wall] = true
+         column[5][:wall] = true
+       end
+       # vertical walls
+       (6..14).each do |y|
+         result[14][y][:wall] = true
+         result[25][y][:wall] = true
+       end
+       result
+     end
+     # =======
+     def build_map
+       result = 40.times.map { 22.times.map { {} } }
+       # horizontal walls
+       result[14..25].each do |column|
+         column[15][:wall] = true
+         column[5][:wall] = true
+       end
+       # vertical walls
+       (6..14).each do |y|
+         result[14][y][:wall] = true
+         result[25][y][:wall] = true
+       end
+       # Replace a wall with a closed door
+       result[20][15].delete(:wall)
+       result[20][15][:door] = { closed: true }
+       result
+     end
+   #+end_src
+
+   Later on we will probably need a more sophisticated way of handling maps, cells and entities inside those cells but
+   for now this simple hash should be more than enough.
+
+   Next, let's take care of the rendering (assuming we have defined two sprites for open and closed doors):
+
+   #+begin_src ruby
+     current_map.each_with_index do |column, x|
+       column.each_with_index do |cell, y|
+         if cell[:wall]
+           args.outputs.sprites << sprite_at_position(sprites[:wall], { x: x, y: y })
+         end
+       end
+     end
+     # =======
+     current_map.each_with_index do |column, x|
+       column.each_with_index do |cell, y|
+         if cell[:wall]
+           args.outputs.sprites << sprite_at_position(sprites[:wall], { x: x, y: y })
+         elsif cell[:door]
+           sprite = if cell[:door][:closed]
+                      sprites[:closed_door]
+                    else
+                      sprites[:open_door]
+                    end
+           args.outputs.sprites << sprite_at_position(sprite, { x: x, y: y })
+         end
+       end
+     end
+   #+end_src
+
+   This too is quite coupled to the actual map data structure and not optimized at all - but one step at a time - until
+   we actually need all that.
+
+   Next on our list is making sure that we can actually only walk through doors when they are not closed, so let's
+   update our ~can_move?~ function accordingly:
+
+   #+begin_src ruby
+     def can_move?(position, direction, current_map)
+       new_x = position[:x] + direction[:x]
+       new_y = position[:y] + direction[:y]
+       cell = cell_at(current_map, new_x, new_y)
+       !cell[:wall]
+     end
+     # =======
+     def can_move?(position, direction, current_map)
+       new_x = position[:x] + direction[:x]
+       new_y = position[:y] + direction[:y]
+       cell = cell_at(current_map, new_x, new_y)
+       return false if cell[:door] && cell[:door][:closed]
+
+       !cell[:wall]
+     end
+   #+end_src
+
+   For the actual opening and closing of the door I will introduce a generic "Interact" input action which will
+   eventually be responsible for all kinds of default interactions with people and objects.
+
+   So first adding it to our input parsing code:
+
+   #+begin_src ruby
+     player_action = {}
+     keyboard = args.inputs.keyboard
+     if keyboard.key_down.up
+       player_action = { type: :move, direction: { x:  0, y:  1 } }
+     elsif keyboard.key_down.down
+       player_action = { type: :move, direction: { x:  0, y: -1 } }
+     elsif keyboard.key_down.left
+       player_action = { type: :move, direction: { x: -1, y:  0 } }
+     elsif keyboard.key_down.right
+       player_action = { type: :move, direction: { x:  1, y:  0 } }
+     end
+     # =======
+     player_action = {}
+     keyboard = args.inputs.keyboard
+     if keyboard.key_down.up
+       player_action = { type: :move, direction: { x:  0, y:  1 } }
+     elsif keyboard.key_down.down
+       player_action = { type: :move, direction: { x:  0, y: -1 } }
+     elsif keyboard.key_down.left
+       player_action = { type: :move, direction: { x: -1, y:  0 } }
+     elsif keyboard.key_down.right
+       player_action = { type: :move, direction: { x:  1, y:  0 } }
+     elsif keyboard.key_down.space
+       player_action = { type: :interact }
+     end
+   #+end_src
+
+   And then adding the actual interaction to our player action handling code:
+
+   #+begin_src ruby
+     case player_action[:type]
+     when :move
+       # ...
+     when :interact
+       neighboring_cells = [[0, 1], [0, -1], [1, 0], [-1, 0]].map { |direction|
+         x = player_position[:x] + direction[0]
+         y = player_position[:y] + direction[1]
+         current_map[x][y]
+       }
+       door = neighboring_cells.find { |cell| cell[:door] }
+       if door
+         door[:door][:closed] = !door[:door][:closed]
+       end
+     end
+   #+end_src
+
+   And with that we have implemented doors:
 
    [[file:videos/cyberpunk-rl-0002-walls-and-a-door.mp4][Leaving the room]]
 
