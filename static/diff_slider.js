@@ -1,13 +1,15 @@
 function setDiffSlider (diff, percentage) {
   const slider = diff.querySelector('.diff-slider');
   const leftArea = slider.nextElementSibling;
+  const handle = diff.nextElementSibling;
   slider.style.marginLeft = `calc(-${100 - percentage}% - 5px)`;
   leftArea.style.width = `calc(${percentage}% - 5px)`;
   leftArea.style.marginLeft = `calc(-${percentage}% - 5px)`;
+  handle.style.marginLeft = `calc(${percentage}% - 40px)`;
 }
 
 (() => {
-  const diffs = document.querySelectorAll('.code-block.diff');
+  const diffs = document.querySelectorAll('.diff');
   diffs.forEach((diff) => {
     setDiffSlider(diff, 0);
     const slider = diff.querySelector('.diff-slider');

@@ -60,7 +60,7 @@ pre code.hljs {
     font-size: 14px;
 }
 
-.code-block.diff {
+.diff {
     display: flex;
 
     .diff-left {
@@ -93,6 +93,17 @@ pre code.hljs {
                 box-sizing: border-box;
             }
         }
+    }
+}
+
+.diff-slider-handle {
+    font-size: 14px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+
+    span {
+        font-size: 30px;
     }
 }
 

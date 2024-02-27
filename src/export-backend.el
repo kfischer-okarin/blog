@@ -129,7 +129,8 @@
 (defun org-export-website-src-block--build-diff-code-block (language code)
   (let ((indent (string-match "[^ ]" code)))
     (pcase-let ((`(,left ,right) (split-string code "# =======\n")))
-      (concat "<div class=\"code-block diff\">\n"
+      (concat "<div class=\"code-block\">\n"
+              "<div class=\"diff\">\n"
               "<div class=\"diff-left\">\n"
               (org-export-website-src-block--build-html language left) "\n"
               "</div>\n"
@@ -137,6 +138,8 @@
               "<div class=\"diff-right\">\n"
               (org-export-website-src-block--build-html language right) "\n"
               "</div>\n"
+              "</div>\n"
+              "<div class=\"diff-slider-handle\">after<span>▴</span>before</div>\n"
               "</div>"))))
 
 (defun org-export-website-src-block--build-html (language code)

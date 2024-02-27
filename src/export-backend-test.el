@@ -128,7 +128,8 @@
                                    "  5 + 6"
                                    "  7 + 8"
                                    "#+end_src")
-                 (concat-lines "<div class=\"code-block diff\">"
+                 (concat-lines "<div class=\"code-block\">"
+                               "<div class=\"diff\">"
                                "<div class=\"diff-left\">"
                                "<pre><code class=\"language-ruby\">1 + 2"
                                "3 + 4"
@@ -140,6 +141,8 @@
                                "7 + 8"
                                "</code></pre>"
                                "</div>"
+                               "</div>"
+                               "<div class=\"diff-slider-handle\">after<span>▴</span>before</div>"
                                "</div>"))))
 
 (ert-deftest test-org-export-website-plain-list ()
