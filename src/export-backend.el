@@ -10,6 +10,7 @@
                                                      (italic . org-export-website-italic)
                                                      (code . org-export-website-code)
                                                      (src-block . org-export-website-src-block)
+                                                     (quote-block . org-export-website-quote-block)
                                                      (footnote-reference . org-export-website-footnote-reference)
                                                      (plain-list . org-export-website-plain-list)
                                                      (item . org-export-website-item))
@@ -155,6 +156,9 @@
              code-lines
              "\n")
             "</code></pre>")))
+
+(defun org-export-website-quote-block (quote-block contents _info)
+  (concat "<blockquote>" contents "</blockquote>"))
 
 (defun org-export-website-footnote-reference (footnote-reference contents info)
   (let* ((footnotes (plist-get info :footnotes))

@@ -145,6 +145,16 @@
                                "<div class=\"diff-slider-handle\">after<span>▴</span>before</div>"
                                "</div>"))))
 
+(ert-deftest test-org-export-website-quote-block ()
+  (should (equal (export-org-lines "#+begin_quote"
+                                   "  foo"
+                                   "  bar"
+                                   "#+end_quote")
+                 (concat-lines "<blockquote><p>foo"
+                               "bar"
+                               "</p>"
+                               "</blockquote>"))))
+
 (ert-deftest test-org-export-website-plain-list ()
   (should (equal (export-org-lines "- foo"
                                    "- bar")
