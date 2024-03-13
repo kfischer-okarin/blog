@@ -44,6 +44,10 @@ h2 {
     margin-bottom: 0.5rem;
 }
 
+h3 {
+    margin-bottom: 0.5rem;
+}
+
 /* === Code blocks === */
 .code-block {
     pre {
