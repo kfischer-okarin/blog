@@ -10,28 +10,6 @@
 #+PROPERTY: header-args:mermaid+ :exports results
 
 
-* Capturing all my git commits with org mode
-  :PROPERTIES:
-  :END:
-
-** Why log my commits?
-   I often struggle with remembering what kind of things I worked on exactly during a work day and how much time I spent
-   on them. I tried dozens of clocking applications but in the end they all rely on my own disciplined ability to turn
-   the clock on at the right time and switch the clocked task when I start working on something else.
-
-   So I guess the best way to remember what I did would be to automatically log all kinds of little things I do at the
-   computer so I can use that data as landmarks when I look back on the day.
-
-   One main activity I do during my development day time job (and during lots of my free time coding) is committing to a
-   repository so that seems like a good place to start.
-
-** Mechanism overview
-   #+begin_src mermaid
-     flowchart LR
-       Hook-->Test
-   #+end_src
-
-
 * It starts with an @
   :PROPERTIES:
   :POST_ID: it_starts_with_an_at
@@ -531,6 +509,33 @@
    So enough rambling about refactoring principles (read more on Martin Fowler's blog if you're seriously interested
    want to know more about the topic directly from the source) - let's extract some functions.
 
+
+* To Write
+** Capturing all my git commits with org mode
+   :PROPERTIES:
+   :END:
+
+*** Why log my commits?
+    I often struggle with remembering what kind of things I worked on exactly during a work day and how much time I spent
+    on them. I tried dozens of clocking applications but in the end they all rely on my own disciplined ability to turn
+    the clock on at the right time and switch the clocked task when I start working on something else.
+
+    So I guess the best way to remember what I did would be to automatically log all kinds of little things I do at the
+    computer so I can use that data as landmarks when I look back on the day.
+
+    One main activity I do during my development day time job (and during lots of my free time coding) is committing to a
+    repository so that seems like a good place to start.
+
+*** Mechanism overview
+    #+begin_src mermaid
+      flowchart LR
+        Hook-->Test
+    #+end_src
+
+
+** Favorite Abstractions: GridView
+
+** Favorite Abstractions: MenuNavigation
 
 * File Settings                                                    :noexport:
   Local Variables:
