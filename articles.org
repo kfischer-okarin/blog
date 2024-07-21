@@ -459,34 +459,6 @@
    [[file:videos/cyberpunk-rl-0002-walls-and-a-door.mp4][Leaving the room]]
 
 
-* An ECS Example
-   Let's assume you have a game where you can hit things with a pickaxe to destroy them and farm their materials
-   (totally arbitrary example, I know - who would ever come up with something like that ;) ). These kind of items need
-   could specify several kinds of properties like how hard of a tool you need to be able to destroy them, how many hits
-   they take, what materials they exactly drop and so on.
-
-   Expressed as a simple Ruby Hash data structure this could look like this for example:
-
-   #+begin_src ruby
-     OBJECT_TYPES = {
-       tree: {
-         required_tool_material: :iron,
-         break_with_tool_hp: 10,
-         dropped_materials: [
-           { type: :wood_log, amount: 10 }
-         ]
-       },
-       mithril_rock: {
-         required_tool_material: :mithril,
-         break_with_tool_hp: 100,
-         dropped_materials: [
-           { type: :mithril_ore, amount: 3 }
-         ]
-       }
-       # ... many more object definitions
-     }
-   #+end_src
-
 * To Write
 ** Capturing all my git commits with org mode
    :PROPERTIES:
