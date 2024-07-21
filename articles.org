@@ -459,56 +459,33 @@
    [[file:videos/cyberpunk-rl-0002-walls-and-a-door.mp4][Leaving the room]]
 
 
-* Self-centered
-  :PROPERTIES:
-  :SERIES: CyberpunkRL
-  :END:
-  Last week we finished with basic wall collision and a door. This time I'm going to keep the camera centered on the
-  player.
+* An ECS Example
+   Let's assume you have a game where you can hit things with a pickaxe to destroy them and farm their materials
+   (totally arbitrary example, I know - who would ever come up with something like that ;) ). These kind of items need
+   could specify several kinds of properties like how hard of a tool you need to be able to destroy them, how many hits
+   they take, what materials they exactly drop and so on.
 
-  But first it's refactoring time!
+   Expressed as a simple Ruby Hash data structure this could look like this for example:
 
-** When and why to extract a function
-   Just recently I read an interesting [[https://martinfowler.com/bliki/FunctionLength.html][short article by Martin Fowler about Function Length]] in which he describes a nice
-   little guideline for when to extract a piece of code into a function:
-
-   #+begin_quote
-     If you have to spend effort into looking at a fragment of code to figure out /what/ it's doing, then you should
-     extract it into a function and name the function after that “what”.
-   #+end_quote
-
-   I often encounter people online that criticize the practice of extracting many small methods usually for one of the
-   following two reasons:
-
-*** Objection: It's hard to understand
-    The first one being that it's hard to understand and you have to jump around a lot in your code to get the whole
-    picture. But wouldn't that just be because you cannot trust the name of the function? The biggest benefit of
-    abstraction is that you do something and don't need to care how exactly it is done. It frees your limited working
-    memory up to focus on the context right in front of you.
-
-    Admittedly, naming things /well/ is a very difficult task but such a very important one for at least the
-    aforementioned reason.
-
-    Depending on the language and tooling you have at your disposal you can of course offer yourself additional help by
-    adding a little documentation sentence and well named parameters which can then for example be displayed by your
-    editor's language server functionality while you're typing the function name or having your cursor on top of it.
-
-    But the more clear your function name is the easier it will be for you to just read and understand a piece of code at
-    a glance without even minimal additional effort like moving your cursor over a function name.
-
-*** Objection: It's slow
-    If you're using a compiled language then the compiler usually will automatically rearrange and inline code for you,
-    so it shouldn't really matter how you factor your code. In interpreted languages the issue could be more serious
-    (even more so if you're making games which need to run at 60 frames per second).
-
-    But I'd argue that well factored and easy to understand code will usually make it easier to pin-point the
-    problematic parts of your code and then you can conduct your optimizations safely isolated behind a hopefully well
-    chosen name without any other part of your code having to care about any of that.
-
-** Extracting some parts of the tick
-   So enough rambling about refactoring principles (read more on Martin Fowler's blog if you're seriously interested
-   want to know more about the topic directly from the source) - let's extract some functions.
-
+   #+begin_src ruby
+     OBJECT_TYPES = {
+       tree: {
+         required_tool_material: :iron,
+         break_with_tool_hp: 10,
+         dropped_materials: [
+           { type: :wood_log, amount: 10 }
+         ]
+       },
+       mithril_rock: {
+         required_tool_material: :mithril,
+         break_with_tool_hp: 100,
+         dropped_materials: [
+           { type: :mithril_ore, amount: 3 }
+         ]
+       }
+       # ... many more object definitions
+     }
+   #+end_src
 
 * To Write
 ** Capturing all my git commits with org mode
@@ -536,6 +513,7 @@
 ** Favorite Abstractions: GridView
 
 ** Favorite Abstractions: MenuNavigation
+
 
 * File Settings                                                    :noexport:
   Local Variables:
