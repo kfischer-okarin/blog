@@ -215,12 +215,15 @@
       (let* ((title (org-element-property :raw-value headline))
              (published-at (org-time-string-to-time (org-element-property :PUBLISHED_AT headline)))
              (published-at-string (format-time-string "%Y-%m-%d" published-at))
-             (headlines (plist-get info :headlines)))
+             (headlines (plist-get info :headlines))
+             (post-url (if (getenv "CI")
+                           (concat "posts/" post-id)
+                         (concat "posts/" post-id ".html"))))
         (plist-put info :headlines
                    (cons (list
                           :published-at published-at
                           :html (concat "<li>"
-                                        "<a href=\"posts/" post-id "\">"
+                                        "<a href=\"" post-url "\">"
                                         title
                                         "</a>"
                                         "<br />"
