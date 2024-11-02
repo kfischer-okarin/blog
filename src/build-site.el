@@ -1,7 +1,34 @@
-; For straight.el support
-(add-to-list 'load-path (expand-file-name "straight/build/ob-mermaid" user-emacs-directory))
+(defun build-site ()
+  ; For straight.el support
+  (add-to-list 'load-path (expand-file-name "straight/build/ob-mermaid" user-emacs-directory))
 
-(package-initialize)
+  (package-initialize)
+
+  (load-file "./src/export-backend.el")
+
+  (shell-command-with-echo "git clean -fx ./dist")
+  (shell-command-with-echo "git clean -fx ./images")
+
+  (log-message "Building site...")
+
+  (let ((enable-local-variables :all))
+    (find-file "articles.org"))
+
+  (export-all-articles)
+
+  (export-index)
+
+  (log-message "Copying static files...")
+  (shell-command-with-echo "cp -r ./static/* ./dist/")
+
+  (log-message "Copying images...")
+  (shell-command-with-echo "cp -r ./images ./dist/")
+
+  (log-message "Copying videos...")
+  (shell-command-with-echo "cp -r ./videos ./dist/")
+
+  (log-message "Done!"))
+
 
 (defun log-message (message)
   (princ (concat message "\n")))
@@ -80,27 +107,4 @@
                     ,(getenv "BLOG_URL")))
    "./dist/index.html"))
 
-(load-file "./src/export-backend.el")
-
-(shell-command-with-echo "git clean -fx ./dist")
-(shell-command-with-echo "git clean -fx ./images")
-
-(log-message "Building site...")
-
-(let ((enable-local-variables :all))
-  (find-file "articles.org"))
-
-(export-all-articles)
-
-(export-index)
-
-(log-message "Copying static files...")
-(shell-command-with-echo "cp -r ./static/* ./dist/")
-
-(log-message "Copying images...")
-(shell-command-with-echo "cp -r ./images ./dist/")
-
-(log-message "Copying videos...")
-(shell-command-with-echo "cp -r ./videos ./dist/")
-
-(log-message "Done!")
+(build-site)
